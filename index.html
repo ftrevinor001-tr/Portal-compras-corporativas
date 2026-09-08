@@ -49,14 +49,14 @@ body{
   font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
   font-size:14px; line-height:1.45; -webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:1360px;margin:0 auto;padding:0 20px 56px}
+.wrap{max-width:1500px;margin:0 auto;padding:0 20px 56px}
 
 /* ---------- header ---------- */
 header{
   background:var(--surface); border-bottom:1px solid var(--ring);
   position:sticky; top:0; z-index:40;
 }
-.hd{max-width:1360px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.hd{max-width:1500px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:11px;min-width:0}
 .logo{
   width:38px;height:38px;border-radius:10px;flex:none;
@@ -76,6 +76,8 @@ header{
 .btn.primary{background:var(--series-1);border-color:var(--series-1);color:#fff}
 .btn.primary:hover{filter:brightness(1.08)}
 .btn.icon{padding:7px 9px}
+.btn.on{background:color-mix(in srgb,var(--st-good) 14%,var(--surface));
+  border-color:color-mix(in srgb,var(--st-good) 50%,transparent);color:var(--ink)}
 
 /* ---------- pestañas ---------- */
 .tabs{display:flex;gap:4px;background:var(--raised);border:1px solid var(--ring);border-radius:10px;padding:3px}
@@ -132,6 +134,12 @@ p.secp{margin:0 0 11px;font-size:12.5px;color:var(--muted)}
 .msg.ok{background:color-mix(in srgb,var(--st-good) 11%,var(--surface));border:1px solid color-mix(in srgb,var(--st-good) 38%,transparent)}
 .msg.err{background:color-mix(in srgb,var(--st-critical) 9%,var(--surface));border:1px solid color-mix(in srgb,var(--st-critical) 38%,transparent)}
 .msg.wait{background:var(--raised);border:1px solid var(--ring);color:var(--ink-2)}
+.msg ul.diag,.msg .chk ol{margin:7px 0;padding-left:20px}
+.msg ul.diag{list-style:none;padding-left:0}
+.msg ul.diag li{margin-bottom:5px;line-height:1.5}
+.msg .chk{margin-top:7px}
+.msg .chk li{margin-bottom:5px;line-height:1.5}
+.msg code{background:var(--raised);border:1px solid var(--ring);border-radius:5px;padding:1px 5px;font-size:11.5px}
 
 /* ---------- pestaña de datos ---------- */
 #pane-datos{padding-top:22px}
@@ -145,6 +153,7 @@ p.secp{margin:0 0 11px;font-size:12.5px;color:var(--muted)}
 .maptbl .col{font-weight:600}
 .maptbl code{background:var(--raised);border:1px solid var(--ring);border-radius:5px;padding:1px 6px;font-size:11.5px}
 .maptbl .falta{color:var(--st-critical);font-weight:600}
+.maptbl .calc{color:var(--st-good);font-weight:600;cursor:help}
 .maptbl .grupo td{padding-top:13px;font-size:10.5px;font-weight:700;letter-spacing:.05em;
   text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--axis)}
 .req{font-size:12.5px;color:var(--ink-2);line-height:1.6}
@@ -154,6 +163,9 @@ p.secp{margin:0 0 11px;font-size:12.5px;color:var(--muted)}
 .req code{background:var(--raised);border:1px solid var(--ring);border-radius:5px;padding:1px 6px;font-size:11.5px;color:var(--ink)}
 .req .ojo{background:color-mix(in srgb,var(--st-warning) 11%,var(--surface));
   border:1px solid color-mix(in srgb,var(--st-warning) 40%,transparent);
+  border-radius:9px;padding:9px 11px;margin:12px 0}
+.req .ok{background:color-mix(in srgb,var(--st-good) 9%,var(--surface));
+  border:1px solid color-mix(in srgb,var(--st-good) 36%,transparent);
   border-radius:9px;padding:9px 11px;margin:12px 0}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:14px}
 .stat{background:var(--surface);border:1px solid var(--ring);border-radius:11px;padding:12px 14px;box-shadow:var(--shadow)}
@@ -269,7 +281,7 @@ td{padding:8px 9px;border-bottom:1px solid var(--grid);vertical-align:middle}
 tbody tr:hover td{background:var(--raised)}
 .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .id{font-variant-numeric:tabular-nums;color:var(--ink-2);white-space:nowrap}
-.desc{min-width:150px;max-width:250px}
+.desc{min-width:128px;max-width:230px}
 .tag{
   display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;
   padding:3px 7px 3px 5px;border-radius:999px;white-space:nowrap;
@@ -284,6 +296,12 @@ tr.grp th{
 }
 tr.grp th span{display:block;font-size:9.5px;font-weight:500;letter-spacing:.01em;text-transform:none;opacity:.85}
 tr.grp th.act{color:var(--ink)}
+tr.grp th.gPr{color:var(--ink);background:color-mix(in srgb,var(--st-good) 9%,var(--surface))}
+th.pr,td.pr{border-left:1px solid var(--axis)}
+th.pr+th.pr,td.pr+td.pr{border-left:0}
+.comprar{font-weight:680;color:var(--ink);font-variant-numeric:tabular-nums}
+.cero{color:var(--muted)}
+td.pr.act .comprar{color:var(--st-good)}
 th.gA,td.gA{background:color-mix(in srgb,var(--muted) 7%,var(--surface))}
 th.gP,td.gP{background:color-mix(in srgb,var(--muted) 13%,var(--surface))}
 th.gA.act,td.gA.act{background:color-mix(in srgb,var(--series-1) 10%,var(--surface))}
@@ -390,6 +408,7 @@ tfoot td{padding:10px 12px;font-size:12px;color:var(--muted);border:0}
             </div>
             <div class="pubbtns">
               <button class="btn primary" id="doPub">📤 Publicar al repositorio</button>
+              <button class="btn" id="probar">🔍 Probar token</button>
               <button class="btn" id="fgToken">Olvidar token</button>
             </div>
             <div id="pubMsg"></div>
@@ -419,9 +438,16 @@ tfoot td{padding:10px 12px;font-size:12px;color:var(--muted);border:0}
           <li><code>MARCA</code>, <code>SUBGRUPO</code>, <code>COMPRADOR</code></li>
           <li><b>Antecedente:</b> <code>Consumo promedio Ant</code>, <code>Meses de inv. Ant.</code>, <code>Estatus Ant.</code></li>
           <li><b>Pronóstico:</b> <code>Consumo promedio 2025</code>, <code>Meses de inv. Pron.</code>, <code>Estatus Pron.</code></li>
+          <li><i>Opcionales:</i> <code>Propuesta Ant.</code>, <code>Propuesta Pron.</code> — si no vienen, se calculan</li>
         </ul>
         <p class="ojo"><b>⚠ Pendiente en tu archivo:</b> en <code>Stock_compras acumulado</code> las tres columnas del pronóstico se llaman <code>Columna1</code>, <code>Columna2</code> y <code>Columna3</code>. El portal las reconoce por posición, pero conviene renombrarlas: si algún día insertas una columna en medio, eso es lo primero que se rompe.</p>
         <p><b>Estatus válidos</b> — FALTANTE, RIESGO, OPTIMO, SOBRE INVENTARIO, SIN CONSUMO. No importan acentos ni mayúsculas.</p>
+        <p class="ok"><b>🛒 Propuesta de compra.</b> Si el archivo trae <code>Propuesta Ant.</code>
+        y <code>Propuesta Pron.</code>, se usan tal cual. Si no vienen — como pasa hoy en la hoja
+        <code>Stock_compras acumulado</code> — el portal las calcula con la misma fórmula del Excel:
+        <br><b>Inventario objetivo × Consumo promedio − Existencia</b>, y si da negativo, cero.
+        <br>Verificado contra las 108 claves de <code>Stock_compras corporativas</code>: coincide en todas.
+        La columna <b>Columnas detectadas</b> aquí a un lado dice cuál de los dos casos aplica.</p>
       </div>
     </div>
   </div>
@@ -466,6 +492,7 @@ tfoot td{padding:10px 12px;font-size:12px;color:var(--muted);border:0}
     <select id="fBuy"><option value="">Todos los compradores</option></select>
     <select id="fMar"><option value="">Todas las marcas</option></select>
     <select id="fSub"><option value="">Todos los subgrupos</option></select>
+    <button class="btn" id="soloProp" aria-pressed="false">🛒 Sólo por comprar</button>
     <button class="btn" id="clear">Limpiar</button>
     <span class="chip" id="count"></span>
   </div>
@@ -513,6 +540,13 @@ function catOf(v){
 let ROWS = [], DATES = [], LATEST = null, HIST = {};
 let META = null;   // {archivo, hoja, headers, mapa, filas, claves, origen}
 let AOA = null, HOJA = "";   // snapshot crudo, para poder publicarlo al repo
+let PROP_CALC = {A:false, P:false};   // ¿la propuesta se calculó o vino en el archivo?
+/* misma fórmula que el Excel */
+function propuesta(obj, cons, exi){
+  if(obj===null||obj===undefined||cons===null||cons===undefined) return null;
+  return Math.max(0, Math.round(obj*cons - (exi||0)));
+}
+const rProp = r => BASE==="A" ? r.propA : r.propP;
 const DATOS_URL = "datos.json";
 let sortKey="cat", sortDir=1;
 const state = {cat:"", buy:"", mar:"", sub:"", q:"", only:""};
@@ -590,10 +624,12 @@ const HEAD = {
   consA: ["CONSUMOPROMEDIOANT","CONSUMOPROMEDIO"],
   mesesA:["MESESDEINVANT","MESESDEINVENTARIO1","MESESDEINVENTARIO"],
   catA:  ["ESTATUSANT","PERSONALIZADO"],
+  propA: ["PROPUESTAANT","PROPUESTADECOMPRAANT"],
   /* --- pronóstico: mismos 4 meses del año anterior --- */
   consP: ["CONSUMOPROMEDIOPRON","CONSUMOPROMEDIO2025","CONSUMOPRONOSTICO","COLUMNA1"],
   mesesP:["MESESDEINVPRON","MESESDEINVENTARIOPRON","COLUMNA2"],
-  catP:  ["ESTATUSPRON","COLUMNA3"]
+  catP:  ["ESTATUSPRON","COLUMNA3"],
+  propP: ["PROPUESTAPRON","PROPUESTADECOMPRAPRON","PROPUESTA2025"]
 };
 function mapCols(hdr){
   const m={}, N=hdr.map(norm), used=new Set();
@@ -606,7 +642,7 @@ function mapCols(hdr){
   };
   // primero los nombres explícitos de cada escenario, luego los genéricos
   const order = ["fecha","id","desc","lead","obj","est","uni","cont","exi","mar","sub","buy",
-                 "consA","mesesA","catA","consP","mesesP","catP"];
+                 "consA","mesesA","catA","propA","consP","mesesP","catP","propP"];
   for(const k of order) take(k, HEAD[k], true);
   for(const k of order) if(m[k]===undefined) take(k, HEAD[k], false);
   return m;
@@ -655,9 +691,11 @@ function ingestAOA(aoa, hoja, hojas){
       consA: M.consA !==undefined?num(r[M.consA]) :null,
       mesesA:M.mesesA!==undefined?num(r[M.mesesA]):null,
       catA:  catA || catP,
+      propA: M.propA !==undefined?num(r[M.propA]) :null,
       consP: M.consP !==undefined?num(r[M.consP]) :null,
       mesesP:M.mesesP!==undefined?num(r[M.mesesP]):null,
-      catP:  catP || catA
+      catP:  catP || catA,
+      propP: M.propP !==undefined?num(r[M.propP]) :null
     });
   }
   if(!all.length) return alert("No encontré filas con estatus válido (Estatus Ant. / Personalizado).");
@@ -671,6 +709,14 @@ function ingestAOA(aoa, hoja, hojas){
     all.filter(r=>r.fecha===d).forEach(r=>{ if(r.catA)A[r.catA]++; if(r.catP)P[r.catP]++; });
     HIST[d]={A,P};
   }
+  // Propuesta de compra: se usa la columna del Excel si viene; si no, se calcula con la
+  // misma fórmula del archivo -> max(0, inventario objetivo × consumo promedio − existencia)
+  PROP_CALC = {A: M.propA===undefined, P: M.propP===undefined};
+  for(const r of all){
+    if(r.propA===null) r.propA = propuesta(r.obj, r.consA, r.exi);
+    if(r.propP===null) r.propP = propuesta(r.obj, r.consP, r.exi);
+  }
+
   ROWS = all.filter(r=>r.fecha===LATEST);
   META.filas = all.length; META.claves = ROWS.length;
 
@@ -732,14 +778,18 @@ const CAMPOS = [
   ["mar","Marca"],["sub","Subgrupo"],["buy","Comprador"],
   ["__g","Antecedente (4 meses anteriores)"],
   ["consA","Consumo promedio"],["mesesA","Meses de inventario"],["catA","Estatus"],
+  ["propA","Propuesta de compra"],
   ["__g","Pronóstico (mismos 4 meses, año pasado)"],
-  ["consP","Consumo promedio"],["mesesP","Meses de inventario"],["catP","Estatus"]
+  ["consP","Consumo promedio"],["mesesP","Meses de inventario"],["catP","Estatus"],
+  ["propP","Propuesta de compra"]
 ];
 function renderDatos(){
   if(!META || !META.mapa) return;
   const M=META.mapa, H=META.headers||[];
   const kb = k => {
     const i = M[k];
+    if((k==="propA"||k==="propP") && (i===undefined||i===null))
+      return `<span class="calc" title="El archivo no trae esta columna, así que el portal la calcula">🧮 calculada</span>`;
     if(i===undefined || i===null) return `<span class="falta">no encontrada</span>`;
     const h = (H[i]||"").trim() || `(columna ${i+1} sin encabezado)`;
     const gen = /^columna\d+$/i.test(h);
@@ -845,6 +895,7 @@ function initPub(){
     pubMsg("wait","Token borrado de este navegador.");
   };
   $("doPub").onclick = publicar;
+  $("probar").onclick = probar;
 }
 function pubMsg(k,html){ $("pubMsg").innerHTML = `<div class="msg ${k}">${html}</div>`; }
 function b64(str){
@@ -866,7 +917,7 @@ async function publicar(){
     const get=await fetch(`${url}?ref=${encodeURIComponent(branch)}`,{headers:H});
     if(get.status===200) sha=(await get.json()).sha;
     else if(get.status===401) return pubMsg("err","El token no es válido o expiró. Genera uno nuevo.");
-    else if(get.status===403) return pubMsg("err","El token no tiene permiso <b>Contents: Read and write</b> sobre este repositorio.");
+    else if(get.status===403) return pubMsg("err","El token no tiene acceso a este repositorio. Revisa <b>Repository access</b> y el permiso <b>Contents</b> del token, o dale a <b>Probar token</b> aquí abajo.");
     else if(get.status===404 && !(await verificaRepo(owner,repo,H))) return;
 
     const put=await fetch(url,{method:"PUT",headers:{...H,"Content-Type":"application/json"},body:JSON.stringify({
@@ -877,6 +928,25 @@ async function publicar(){
       const j=await put.json();
       pubMsg("ok",`✅ <b>Publicado.</b> El equipo ya lo verá al abrir el portal (GitHub Pages tarda ~1 minuto en refrescar).
         ${j.commit&&j.commit.html_url?`<br><a href="${j.commit.html_url}" target="_blank" rel="noopener">Ver el commit en GitHub</a>`:""}`);
+    }else if(put.status===403 || put.status===404){
+      pubMsg("err",`<b>El token puede leer el repositorio, pero no escribir en él.</b> (HTTP ${put.status})
+        <div class="chk">Revisa estas cuatro cosas en el token, en orden — casi siempre es la primera:
+        <ol>
+          <li><b>Permissions → Repository permissions → Contents</b> debe decir
+              <b>Read and write</b>, no <i>Read-only</i>. Este es el error más común.</li>
+          <li><b>Repository access</b> debe ser <b>Only select repositories</b> con
+              <code>${esc(repo)}</code> marcado. Si elegiste
+              <i>Public Repositories (read-only)</i>, nunca va a poder escribir.</li>
+          <li>Si el repositorio es de una <b>organización</b> y no de tu cuenta personal,
+              un administrador tiene que <b>aprobar</b> el token
+              (Organization → Settings → Personal access tokens → Pending requests).</li>
+          <li>Que <code>${esc(owner)}</code> sea el dueño correcto del repositorio.</li>
+        </ol>
+        Al cambiar los permisos de un token fine-grained, GitHub los aplica de inmediato:
+        no hace falta generar uno nuevo, solo vuelve a darle a Publicar.
+        <br><br>Si se complica, usa el <b>camino manual</b>: descarga el
+        <code>datos.json</code> aquí a un lado y súbelo con <b>Add file → Upload files</b>.
+        Queda exactamente igual.</div>`);
     }else{
       const t=await put.text();
       pubMsg("err",`No se pudo publicar (HTTP ${put.status}). <br><small>${esc(t.slice(0,240))}</small>`);
@@ -885,6 +955,55 @@ async function publicar(){
     pubMsg("err","Error de red al hablar con GitHub: "+esc(err.message));
   }
 }
+/* ---------- diagnóstico del token ---------- */
+async function probar(){
+  const owner=$("ghOwner").value.trim(), repo=$("ghRepo").value.trim(),
+        branch=$("ghBranch").value.trim()||"main", token=$("ghToken").value.trim();
+  if(!owner||!repo||!token) return pubMsg("err","Llena usuario, repositorio y token antes de probar.");
+  const H={Authorization:"Bearer "+token, Accept:"application/vnd.github+json", "X-GitHub-Api-Version":"2022-11-28"};
+  const L=[]; let fatal=null;
+  const li=(ok,txt)=>L.push(`<li>${ok?"✅":"❌"} ${txt}</li>`);
+  pubMsg("wait","Probando el token contra GitHub…");
+  try{
+    // 1. ¿el token sirve?
+    const u=await fetch("https://api.github.com/user",{headers:H});
+    if(u.status===401){ return pubMsg("err","❌ <b>El token no es válido o ya expiró.</b> Genera uno nuevo en GitHub → Settings → Developer settings → Personal access tokens."); }
+    if(u.ok){ const j=await u.json(); li(true,`Token válido, pertenece a <b>${esc(j.login||"?")}</b>.`); }
+    else li(true,"Token aceptado por GitHub.");
+
+    // 2. ¿ve el repositorio?
+    const r=await fetch(`https://api.github.com/repos/${owner}/${repo}`,{headers:H});
+    if(r.status===404){
+      li(false,`No ve el repositorio <code>${esc(owner)}/${esc(repo)}</code>. En el token, <b>Repository access</b> debe ser <b>Only select repositories</b> con este repo marcado — o el dueño está mal escrito.`);
+      fatal=true;
+    }else if(!r.ok){
+      li(false,`GitHub respondió ${r.status} al buscar el repositorio.`); fatal=true;
+    }else{
+      const j=await r.json();
+      li(true,`Ve el repositorio <b>${esc(j.full_name)}</b>${j.private?" (privado)":""}.`);
+      if(j.owner && j.owner.type==="Organization")
+        L.push(`<li>ℹ️ Es de la organización <b>${esc(j.owner.login)}</b>. Si el token es fine-grained, un administrador tiene que aprobarlo en <i>Organization → Settings → Personal access tokens → Pending requests</i>.</li>`);
+      // 3. ¿existe la rama?
+      const br=await fetch(`https://api.github.com/repos/${owner}/${repo}/branches/${encodeURIComponent(branch)}`,{headers:H});
+      li(br.ok, br.ok ? `La rama <code>${esc(branch)}</code> existe.`
+                      : `No encontró la rama <code>${esc(branch)}</code>. En GitHub, arriba a la izquierda del repo, verifica si se llama <code>main</code> o <code>master</code>.`);
+      if(!br.ok) fatal=true;
+      // 4. ¿puede leer contenidos?
+      const c=await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/datos.json?ref=${encodeURIComponent(branch)}`,{headers:H});
+      if(c.status===200) li(true,"Puede leer <code>datos.json</code> (ya existe en el repo).");
+      else if(c.status===404) li(true,"Todavía no hay <code>datos.json</code> en el repo; se creará al publicar.");
+      else li(false,`No puede leer contenidos (HTTP ${c.status}). Falta el permiso <b>Contents</b> en el token.`);
+    }
+  }catch(err){
+    return pubMsg("err","Error de red al hablar con GitHub: "+esc(err.message));
+  }
+  pubMsg(fatal?"err":"wait",
+    `<b>Resultado de la prueba</b><ul class="diag">${L.join("")}</ul>` +
+    (fatal ? "Corrige lo marcado con ❌ y vuelve a probar."
+           : `Todo lo que se puede verificar sin escribir está bien. La única prueba real de escritura es publicar: dale a <b>📤 Publicar al repositorio</b>.
+              Si ahí sale 403, el problema es <b>Contents: Read-only</b> en vez de <b>Read and write</b>.`));
+}
+
 async function verificaRepo(owner,repo,H){
   const r=await fetch(`https://api.github.com/repos/${owner}/${repo}`,{headers:H});
   if(r.ok) return true;   // el repo existe, datos.json simplemente todavía no
@@ -930,6 +1049,7 @@ function buildFilters(){
   fm.onchange=()=>{state.mar=fm.value; renderAll();};
   fs.onchange=()=>{state.sub=fs.value; renderAll();};
   $("q").oninput=e=>{state.q=e.target.value.trim().toLowerCase(); renderTable();};
+  $("soloProp").onclick=()=>{ state.only = state.only==="comprar" ? "" : "comprar"; renderAll(); };
   $("clear").onclick=()=>{
     state.cat=state.buy=state.mar=state.sub=state.q=state.only="";
     fc.value=fb.value=fm.value=fs.value=""; $("q").value=""; renderAll();
@@ -937,7 +1057,7 @@ function buildFilters(){
 }
 function filtered(){
   return kpiBase().filter(r=>
-    (!state.only || (state.only==="empeora" && empeora(r))) &&
+    (!state.only || (state.only==="empeora" && empeora(r)) || (state.only==="comprar" && rProp(r)>0)) &&
     (!state.cat || rCat(r)===state.cat) &&
     (!state.q   || r.id.toLowerCase().includes(state.q) || r.desc.toLowerCase().includes(state.q)
                 || r.mar.toLowerCase().includes(state.q) || r.sub.toLowerCase().includes(state.q))
@@ -978,7 +1098,16 @@ const legendFor = cats => cats.map(c=>
 
 /* ============ render maestro ============ */
 function renderAll(){ renderAlerta(); renderKpis(); renderTrend(); renderMonths(); renderCrit(); renderTable(); }
-function updateCount(){ $("count").textContent = `${filtered().length} de ${ROWS.length} claves`; }
+function updateCount(){
+  const n = kpiBase().filter(r=>rProp(r)>0).length;
+  const b = $("soloProp");
+  if(b){
+    b.setAttribute("aria-pressed", state.only==="comprar");
+    b.classList.toggle("on", state.only==="comprar");
+    b.textContent = `🛒 Sólo por comprar (${n})`;
+  }
+  $("count").textContent = `${filtered().length} de ${ROWS.length} claves`;
+}
 
 /* ---------- KPIs ---------- */
 function renderKpis(){
@@ -1170,6 +1299,7 @@ function renderCrit(){
         <div class="r">Existencia<span class="n">${fmtN(r.exi)}</span></div>
         <div class="r">Consumo ${ESC[BASE].corto}<span class="n">${fmtN(rCons(r))}</span></div>
         <div class="r">Meses inv. ${ESC[BASE].corto}<span class="n">${fmtN(rMeses(r),1)}</span></div>
+        <div class="r">🛒 Propuesta ${ESC[BASE].corto}<span class="n">${fmtN(rProp(r))} ${esc(uniLabel(r.uni,rProp(r)))}</span></div>
         ${cambia(r)?`<div class="r">⇄ Con ${BASE==="A"?"pronóstico":"antecedente"}<span class="n">${CATMAP[BASE==="A"?r.catP:r.catA].label}</span></div>`:""}
         <div class="r">Marca<span class="n">${esc(r.mar||"—")}</span></div>
         <div class="r">Subgrupo<span class="n">${esc(r.sub||"—")}</span></div>
@@ -1196,7 +1326,9 @@ const COLS = [
   {k:"lead",  t:"T.entr.", cls:"num", n:1},
   {k:"buy",   t:"Comprador"},
   {k:"mar",   t:"Marca"},
-  {k:"sub",   t:"Subgrupo"}
+  {k:"sub",   t:"Subgrupo"},
+  {k:"propA", t:"Ant.",  cls:"num", g:"A", p:1},
+  {k:"propP", t:"Pron.", cls:"num", g:"P", p:1}
 ];
 const CATORDER = Object.fromEntries(CATS.map((c,i)=>[c.key,i]));
 const esc = s => String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
@@ -1204,16 +1336,17 @@ const esc = s => String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">"
 function renderTable(){
   // fila 1: grupos de escenario · fila 2: encabezados de columna
   const pre  = COLS.slice(0, COLS.findIndex(c=>c.g==="A"));
-  const post = COLS.slice(COLS.findIndex(c=>c.k==="obj"));
+  const mid  = COLS.slice(COLS.findIndex(c=>c.k==="obj"), COLS.findIndex(c=>c.k==="propA"));
   $("thead").innerHTML = `
     <tr class="grp">
       <th colspan="${pre.length}"></th>
       <th colspan="3" class="gA ${BASE==="A"?"act":""}">📊 Antecedente<span>4 meses anteriores</span></th>
       <th colspan="3" class="gP ${BASE==="P"?"act":""}">🔮 Pronóstico<span>mismos 4 meses, año pasado</span></th>
-      <th colspan="${post.length}"></th>
+      <th colspan="${mid.length}"></th>
+      <th colspan="2" class="gPr" title="Cuánto pedir de cada clave, en su unidad mínima: inventario objetivo × consumo promedio − existencia">🛒 Propuesta<span>unidad mínima</span></th>
     </tr>
     <tr>${COLS.map(c=>
-      `<th data-k="${c.k}" class="${c.cls==='num'?'num ':''}${c.g?('g'+c.g+(BASE===c.g?' act':'')):''}">${c.t} <span class="ar">${sortKey===c.k?(sortDir>0?"▲":"▼"):""}</span></th>`
+      `<th data-k="${c.k}" class="${c.cls==='num'?'num ':''}${c.p?'pr ':''}${c.g?('g'+c.g+(BASE===c.g?' act':'')):''}">${c.t} <span class="ar">${sortKey===c.k?(sortDir>0?"▲":"▼"):""}</span></th>`
     ).join("")}</tr>`;
   $("thead").querySelectorAll("th[data-k]").forEach(h=>h.onclick=()=>{
     const k=h.dataset.k;
@@ -1232,6 +1365,8 @@ function renderTable(){
   });
 
   updateCount();
+  const celdaProp = v => (v===null||v===undefined) ? "—"
+    : (v>0 ? `<b class="comprar">${fmtN(v)}</b>` : `<span class="cero">0</span>`);
   const pill=(k,on)=>{
     const c=CATMAP[k]; if(!c) return "—";
     return `<span class="tag${on?"":" off"}" style="--c:${cssv(c.css)}" title="${c.label}"><span class="dot"></span>${c.icon} ${c.corto}</span>`;
@@ -1255,6 +1390,8 @@ function renderTable(){
       <td>${esc(r.buy)}</td>
       <td>${esc(r.mar)}</td>
       <td>${esc(r.sub)}</td>
+      <td class="num pr gA${BASE==="A"?" act":""}">${celdaProp(r.propA)}</td>
+      <td class="num pr gP${BASE==="P"?" act":""}">${celdaProp(r.propP)}</td>
     </tr>`;
   }).join("") || `<tr><td colspan="${COLS.length}" style="padding:26px;text-align:center;color:var(--muted)">Sin resultados con estos filtros.</td></tr>`;
 }
@@ -1266,7 +1403,8 @@ function exportCSV(){
     "Consumo Ant","Meses inv Ant","Estatus Ant",
     "Consumo Pron","Meses inv Pron","Estatus Pron",
     "Cambia estatus","Empeora con pronostico",
-    "Objetivo","Tiempo entrega","Comprador","Marca","Subgrupo","Corte"];
+    "Objetivo","Tiempo entrega","Comprador","Marca","Subgrupo",
+    "Propuesta Ant","Propuesta Pron","Corte"];
   const q=v=>`"${String(v??"").replace(/"/g,'""')}"`;
   const lab=k=>CATMAP[k]?CATMAP[k].label:"";
   const csv=[head.join(",")].concat(rows.map(r=>[
@@ -1274,7 +1412,8 @@ function exportCSV(){
     r.consA,r.mesesA,lab(r.catA),
     r.consP,r.mesesP,lab(r.catP),
     cambia(r)?"SI":"NO", empeora(r)?"SI":"NO",
-    r.obj,r.lead,r.buy,r.mar,r.sub,r.fecha
+    r.obj,r.lead,r.buy,r.mar,r.sub,
+    r.propA,r.propP,r.fecha
   ].map(q).join(","))).join("\n");
   const a=document.createElement("a");
   a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv;charset=utf-8"}));

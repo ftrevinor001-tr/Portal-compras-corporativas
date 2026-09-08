@@ -9,7 +9,7 @@ El repositorio guarda dos archivos:
 | Archivo | Qué es |
 |---|---|
 | `index.html` | El portal. Se toca solo cuando hay cambios de funcionalidad. |
-| `datos.json` | Los datos del último corte (~57 KB). **Este es el que se reemplaza cada vez que hay un corte nuevo.** |
+| `datos.json` | Todos los cortes acumulados (~275 KB con 14 cortes; GitHub lo sirve comprimido en ~15 KB). **Este es el que se reemplaza cada vez que hay un corte nuevo.** |
 
 Al abrir el portal, este lee `datos.json` del repositorio automáticamente. Cualquier
 persona, en cualquier computadora, ve los mismos datos sin cargar nada.
@@ -58,6 +58,26 @@ Un solo clic, pero requiere configurar un token una vez.
 >
 > Si por accidente se expone un token, se revoca en la misma pantalla de GitHub donde se
 > creó y se genera otro.
+
+**Si sale `403 Resource not accessible by personal access token`:**
+
+El token puede leer el repo pero no escribir. En orden de probabilidad:
+
+1. **Contents está en `Read-only`.** Tiene que ser **Read and write**. Es la causa en la
+   gran mayoría de los casos. Se corrige en el token existente — GitHub aplica el cambio
+   de inmediato, no hace falta generar otro.
+2. **Repository access** quedó en *Public Repositories (read-only)* en vez de
+   **Only select repositories** con este repo marcado.
+3. El repo es de una **organización**: un administrador tiene que aprobar el token en
+   *Organization → Settings → Personal access tokens → Pending requests*.
+4. El **usuario/dueño** está mal escrito en el portal.
+
+El botón **🔍 Probar token** del portal verifica el token, el acceso al repo, la rama y
+la lectura de contenidos, y dice cuál de estos falla. La escritura solo se puede
+comprobar publicando de verdad.
+
+Si se atora, el **camino A** (manual) deja exactamente el mismo resultado y no necesita
+token.
 
 ### ¿Y si alguien más quiere revisar su propio Excel?
 
@@ -112,9 +132,29 @@ la fecha del día — **no se borra lo anterior**, de ahí sale la tendencia.
 | Clasificación | `MARCA`, `SUBGRUPO`, `COMPRADOR` |
 | Antecedente | `Consumo promedio Ant`, `Meses de inv. Ant.`, `Estatus Ant.` |
 | Pronóstico | `Consumo promedio 2025`, `Meses de inv. Pron.`, `Estatus Pron.` |
+| Opcionales | `Propuesta Ant.`, `Propuesta Pron.` — si no vienen, el portal las calcula |
 
 Estatus válidos: `FALTANTE`, `RIESGO`, `OPTIMO`, `SOBRE INVENTARIO`, `SIN CONSUMO`
 (no importan acentos ni mayúsculas).
+
+### Propuesta de compra
+
+Es cuánto pedir de cada clave, en su unidad mínima:
+
+```
+Propuesta = máximo(0, Inventario objetivo × Consumo promedio − Existencia)
+```
+
+Se calcula dos veces, una con el consumo del antecedente y otra con el del pronóstico.
+
+Si el archivo trae las columnas `Propuesta Ant.` y `Propuesta Pron.` (hoy solo están en
+`Stock_compras corporativas`), se usan tal cual. Si no vienen — el caso de
+`Stock_compras acumulado`, que es la hoja que lee el portal — se calculan con la fórmula
+de arriba. Verificado contra las 108 claves del Excel: coincide en todas, sin una sola
+diferencia.
+
+La pestaña **Datos** → *Columnas detectadas* dice cuál de los dos casos aplica en cada
+carga: muestra el nombre de la columna, o `🧮 calculada`.
 
 > **Pendiente conocido:** en `Stock_compras acumulado` las tres columnas del pronóstico se
 > llaman `Columna1`, `Columna2` y `Columna3`. El portal las reconoce por posición, pero
@@ -135,6 +175,9 @@ Estatus válidos: `FALTANTE`, `RIESGO`, `OPTIMO`, `SOBRE INVENTARIO`, `SIN CONSU
 - **Tendencia por categoría** a través de los cortes del archivo.
 - **Meses de inventario** con línea de objetivo.
 - **Claves más críticas** por consumo promedio, con unidad mínima, marca y subgrupo.
+- **Propuesta de compra** en la tabla, junto a Subgrupo: cuánto pedir según el
+  antecedente y según el pronóstico. El botón **🛒 Sólo por comprar** filtra las claves
+  con propuesta mayor a cero del escenario activo.
 - **Tabla de detalle** con los dos escenarios lado a lado, filtros de categoría /
   comprador / marca / subgrupo, orden por columna y export a CSV.
 - Modo claro / oscuro.
@@ -145,8 +188,9 @@ Estatus válidos: `FALTANTE`, `RIESGO`, `OPTIMO`, `SOBRE INVENTARIO`, `SIN CONSU
 
 - Un solo archivo `index.html`, sin build ni dependencias que instalar.
 - El `.xlsx` completo pesa ~2.9 MB (por las hojas de Existencias y Productos);
-  `datos.json` guarda solo lo que el tablero usa: ~57 KB, y GitHub lo sirve comprimido
-  en ~6 KB. Por eso el portal abre al instante.
+  `datos.json` guarda solo la hoja acumulada: ~275 KB con 14 cortes, que GitHub sirve
+  comprimida en ~15 KB. Crece unos 20 KB por corte nuevo (unos 1.5 KB ya comprimido),
+  así que aguanta meses de historia sin problema.
 - Usa [SheetJS](https://sheetjs.com) por CDN para leer el `.xlsx`, con respaldo automático
   a jsDelivr y unpkg. Si la red de la empresa bloquea los tres CDNs, descargar
   `xlsx.full.min.js`, ponerlo junto al `index.html` y cambiar el `src` del primer
