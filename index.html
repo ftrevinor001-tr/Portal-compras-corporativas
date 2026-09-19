@@ -93,6 +93,100 @@ header{
   background:var(--st-warning);color:#fff;border-radius:999px;padding:2px 5px;vertical-align:1px;
 }
 
+/* ---------- pestaña Historia ---------- */
+#pane-hist{padding-top:22px}
+.hbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.hsearch{position:relative;flex:1;min-width:260px}
+.hsearch input{
+  font:inherit;font-size:14px;padding:10px 13px;border-radius:10px;width:100%;
+  border:1px solid var(--ring);background:var(--surface);color:var(--ink);box-shadow:var(--shadow);
+}
+.hsearch input:focus{outline:2px solid var(--series-1);outline-offset:-1px}
+.sug{
+  position:absolute;top:calc(100% + 5px);left:0;right:0;z-index:30;max-height:330px;overflow:auto;
+  background:var(--surface);border:1px solid var(--axis);border-radius:11px;box-shadow:0 8px 28px rgba(15,30,51,.15);
+}
+.sug button{
+  display:flex;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;font-size:13px;
+  border:0;border-bottom:1px solid var(--grid);background:transparent;color:inherit;padding:9px 12px;cursor:pointer;
+}
+.sug button:last-child{border-bottom:0}
+.sug button:hover,.sug button.mk{background:var(--raised)}
+.sug .sid{font-variant-numeric:tabular-nums;color:var(--ink-2);font-weight:600;min-width:46px}
+.sug .sds{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sug .vacio{padding:14px;color:var(--muted);font-size:13px;text-align:center}
+
+/* --- ranking --- */
+.rank{background:var(--surface);border:1px solid var(--ring);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.rank h3{margin:0;padding:15px 18px 3px;font-size:14px;font-weight:650}
+.rank .cap{margin:0;padding:0 18px 13px;font-size:12px;color:var(--muted)}
+.rk{
+  display:grid;grid-template-columns:58px minmax(150px,1fr) 128px 132px 1fr;gap:12px;align-items:center;
+  width:100%;text-align:left;font:inherit;border:0;border-top:1px solid var(--grid);
+  background:transparent;color:inherit;padding:10px 18px;cursor:pointer;
+}
+.rk:hover{background:var(--raised)}
+.rk .rid{font-variant-numeric:tabular-nums;color:var(--ink-2);font-weight:600;font-size:12.5px}
+.rk .rds{font-size:13px;min-width:0}
+.rk .rds small{display:block;color:var(--muted);font-size:11px;margin-top:1px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk .rde{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.rk .rde b{display:block;font-size:13px;color:var(--ink)}
+.rank .head{
+  display:grid;grid-template-columns:58px minmax(150px,1fr) 128px 132px 1fr;gap:12px;
+  padding:7px 18px;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--muted);background:var(--raised);border-top:1px solid var(--axis);
+}
+@media(max-width:860px){
+  .rk,.rank .head{grid-template-columns:52px 1fr 108px;}
+  .rk .rmini,.rank .head span:nth-child(4),.rank .head span:nth-child(5){display:none}
+}
+
+/* --- banda de estatus --- */
+.banda{display:flex;gap:2px;min-width:0}
+.banda.mini{gap:1px}
+.bcell{
+  flex:1;min-width:6px;height:26px;border-radius:3px;background:var(--c);position:relative;cursor:default;
+}
+.banda.mini .bcell{height:12px;border-radius:2px;min-width:3px}
+.bcell.gap{background:repeating-linear-gradient(45deg,var(--grid),var(--grid) 3px,transparent 3px,transparent 6px)}
+.bfila{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;margin-bottom:6px}
+.bfila .blab{font-size:12px;font-weight:650;color:var(--ink-2);text-align:right}
+.bejes{display:grid;grid-template-columns:96px 1fr;gap:12px;margin-top:3px}
+.bfechas{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* --- ficha --- */
+.fhead{display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--ring);
+  border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);margin-bottom:14px;flex-wrap:wrap}
+.fhead .fid{font-size:24px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.fhead .fds{font-size:15px;font-weight:600;margin-top:1px}
+.fhead .fmeta{font-size:12px;color:var(--muted);margin-top:5px;display:flex;gap:7px;flex-wrap:wrap}
+.fhead .fmeta span{white-space:nowrap}
+.fhead .fmeta b{color:var(--ink-2);font-weight:600}
+.desde{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:760px){.desde{grid-template-columns:1fr}}
+.dcard{background:var(--surface);border:1px solid var(--ring);border-radius:12px;padding:15px 17px;box-shadow:var(--shadow);
+  border-left:4px solid var(--c)}
+.dcard .esc{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.dcard .est{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:19px;font-weight:680;letter-spacing:-.015em}
+.dcard .est .dt{width:11px;height:11px;border-radius:50%;background:var(--c);flex:none}
+.dcard .txt{font-size:13.5px;color:var(--ink-2);margin-top:8px;line-height:1.5}
+.dcard .txt b{color:var(--ink);font-weight:650}
+.dcard .adv{font-size:11.5px;color:var(--muted);margin-top:6px;font-style:italic;line-height:1.45}
+.dcard.ok{--c:var(--st-good)}
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:900px){.hgrid{grid-template-columns:1fr}}
+.bit{max-height:300px;overflow:auto}
+.bit ol{margin:0;padding:0;list-style:none}
+.bit li{display:grid;grid-template-columns:74px 62px 1fr;gap:10px;align-items:center;
+  padding:8px 2px;border-bottom:1px solid var(--grid);font-size:12.5px}
+.bit li:last-child{border-bottom:0}
+.bit .bf{color:var(--ink-2);font-variant-numeric:tabular-nums;font-weight:600}
+.bit .be{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.bit .bc{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.bit .fl{color:var(--muted)}
+.bit .sinc{color:var(--muted);font-size:12.5px;padding:14px 0;text-align:center}
+
 /* ---------- origen de los datos ---------- */
 .src{display:flex;gap:11px;align-items:flex-start;padding:12px 15px;border-radius:11px;font-size:13px;margin-bottom:20px}
 .src .sub{font-size:12.5px;color:var(--ink-2);margin-top:2px}
@@ -164,9 +258,6 @@ p.secp{margin:0 0 11px;font-size:12.5px;color:var(--muted)}
 .req .ojo{background:color-mix(in srgb,var(--st-warning) 11%,var(--surface));
   border:1px solid color-mix(in srgb,var(--st-warning) 40%,transparent);
   border-radius:9px;padding:9px 11px;margin:12px 0}
-.req .ok{background:color-mix(in srgb,var(--st-good) 9%,var(--surface));
-  border:1px solid color-mix(in srgb,var(--st-good) 36%,transparent);
-  border-radius:9px;padding:9px 11px;margin:12px 0}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:14px}
 .stat{background:var(--surface);border:1px solid var(--ring);border-radius:11px;padding:12px 14px;box-shadow:var(--shadow)}
 .stat .l{font-size:11.5px;color:var(--muted);font-weight:600}
@@ -237,6 +328,9 @@ p.secp{margin:0 0 11px;font-size:12.5px;color:var(--muted)}
 .alert .ai{font-size:16px;line-height:1.2;flex:none}
 .alert b{font-weight:650}
 .alert .lst{margin:5px 0 0;color:var(--ink-2);font-size:12.5px;line-height:1.65}
+ul.dups{margin:9px 0 0;padding-left:18px;font-size:12.5px;color:var(--ink-2);line-height:1.6}
+ul.dups li{margin-bottom:6px}
+ul.dups .dif{color:var(--muted);font-size:11.5px;margin-top:1px}
 .alert .k{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600}
 .alert button{
   font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;margin-top:7px;
@@ -345,6 +439,7 @@ tfoot td{padding:10px 12px;font-size:12px;color:var(--muted);border:0}
     </div>
     <nav class="tabs" id="tabs" role="tablist">
       <button class="tab on" data-t="dash" role="tab">📊 Tablero</button>
+      <button class="tab" data-t="hist" role="tab">📈 Historia</button>
       <button class="tab" data-t="datos" role="tab">📂 Datos</button>
     </nav>
     <div class="hd-right">
@@ -358,7 +453,22 @@ tfoot td{padding:10px 12px;font-size:12px;color:var(--muted);border:0}
 
 <input type="file" id="file" accept=".xlsx,.xlsm,.xls" class="hidden">
 
+<div class="wrap hidden" id="pane-hist">
+  <div class="hbar">
+    <div class="hsearch">
+      <input id="hq" type="search" placeholder="Busca una clave por número o descripción…" autocomplete="off">
+      <div class="sug hidden" id="hsug"></div>
+    </div>
+    <button class="btn" id="hprev" title="Clave anterior">←</button>
+    <button class="btn" id="hnext" title="Clave siguiente">→</button>
+    <button class="btn hidden" id="hclose">✕ Ver el ranking</button>
+  </div>
+  <div id="hrank"></div>
+  <div id="hficha"></div>
+</div>
+
 <div class="wrap" id="pane-datos">
+  <div id="dups"></div>
   <div id="origen"></div>
 
   <h4 class="sec">Cargar un archivo en esta computadora</h4>
@@ -438,16 +548,9 @@ tfoot td{padding:10px 12px;font-size:12px;color:var(--muted);border:0}
           <li><code>MARCA</code>, <code>SUBGRUPO</code>, <code>COMPRADOR</code></li>
           <li><b>Antecedente:</b> <code>Consumo promedio Ant</code>, <code>Meses de inv. Ant.</code>, <code>Estatus Ant.</code></li>
           <li><b>Pronóstico:</b> <code>Consumo promedio 2025</code>, <code>Meses de inv. Pron.</code>, <code>Estatus Pron.</code></li>
-          <li><i>Opcionales:</i> <code>Propuesta Ant.</code>, <code>Propuesta Pron.</code> — si no vienen, se calculan</li>
         </ul>
         <p class="ojo"><b>⚠ Pendiente en tu archivo:</b> en <code>Stock_compras acumulado</code> las tres columnas del pronóstico se llaman <code>Columna1</code>, <code>Columna2</code> y <code>Columna3</code>. El portal las reconoce por posición, pero conviene renombrarlas: si algún día insertas una columna en medio, eso es lo primero que se rompe.</p>
         <p><b>Estatus válidos</b> — FALTANTE, RIESGO, OPTIMO, SOBRE INVENTARIO, SIN CONSUMO. No importan acentos ni mayúsculas.</p>
-        <p class="ok"><b>🛒 Propuesta de compra.</b> Si el archivo trae <code>Propuesta Ant.</code>
-        y <code>Propuesta Pron.</code>, se usan tal cual. Si no vienen — como pasa hoy en la hoja
-        <code>Stock_compras acumulado</code> — el portal las calcula con la misma fórmula del Excel:
-        <br><b>Inventario objetivo × Consumo promedio − Existencia</b>, y si da negativo, cero.
-        <br>Verificado contra las 108 claves de <code>Stock_compras corporativas</code>: coincide en todas.
-        La columna <b>Columnas detectadas</b> aquí a un lado dice cuál de los dos casos aplica.</p>
       </div>
     </div>
   </div>
@@ -540,7 +643,8 @@ function catOf(v){
 let ROWS = [], DATES = [], LATEST = null, HIST = {};
 let META = null;   // {archivo, hoja, headers, mapa, filas, claves, origen}
 let AOA = null, HOJA = "";   // snapshot crudo, para poder publicarlo al repo
-let PROP_CALC = {A:false, P:false};   // ¿la propuesta se calculó o vino en el archivo?
+let PROP_CALC = {A:false, P:false, nA:0, nP:0};
+let HIST_CLAVE = {};          // id -> filas de todos los cortes, ordenadas por fecha
 /* misma fórmula que el Excel */
 function propuesta(obj, cons, exi){
   if(obj===null||obj===undefined||cons===null||cons===undefined) return null;
@@ -709,13 +813,17 @@ function ingestAOA(aoa, hoja, hojas){
     all.filter(r=>r.fecha===d).forEach(r=>{ if(r.catA)A[r.catA]++; if(r.catP)P[r.catP]++; });
     HIST[d]={A,P};
   }
-  // Propuesta de compra: se usa la columna del Excel si viene; si no, se calcula con la
-  // misma fórmula del archivo -> max(0, inventario objetivo × consumo promedio − existencia)
-  PROP_CALC = {A: M.propA===undefined, P: M.propP===undefined};
+  // Propuesta de compra: se usa la columna del Excel si viene; si falta (o viene vacía en
+  // cortes viejos) se calcula igual que el Excel -> max(0, objetivo × consumo − existencia)
+  PROP_CALC = {A: M.propA===undefined, P: M.propP===undefined, nA:0, nP:0};
   for(const r of all){
-    if(r.propA===null) r.propA = propuesta(r.obj, r.consA, r.exi);
-    if(r.propP===null) r.propP = propuesta(r.obj, r.consP, r.exi);
+    if(r.propA===null){ r.propA = propuesta(r.obj, r.consA, r.exi); PROP_CALC.nA++; }
+    if(r.propP===null){ r.propP = propuesta(r.obj, r.consP, r.exi); PROP_CALC.nP++; }
   }
+
+  HIST_CLAVE = {};
+  for(const r of all) (HIST_CLAVE[r.id] ||= []).push(r);
+  for(const k in HIST_CLAVE) HIST_CLAVE[k].sort((a,b)=> a.fecha<b.fecha?-1:1);
 
   ROWS = all.filter(r=>r.fecha===LATEST);
   META.filas = all.length; META.claves = ROWS.length;
@@ -728,7 +836,7 @@ function ingestAOA(aoa, hoja, hojas){
   $("baseDesc").textContent = "— " + ESC[BASE].desc;
   $("dropTitle").textContent = "Reemplazar el archivo";
   $("drop").classList.add("mini");
-  buildFilters(); renderAll(); renderDatos();
+  buildFilters(); initHist(); renderAll(); renderDatos();
   irA("dash");
 }
 
@@ -756,14 +864,12 @@ async function cargarDelRepo(){
 }
 
 /* ============ pestañas ============ */
+const PANES = {dash:"pane-dash", hist:"pane-hist", datos:"pane-datos"};
 function irA(t){
+  if((t==="dash"||t==="hist") && !ROWS.length) t="datos";   // sin datos no hay nada que mostrar
+  for(const k in PANES) $(PANES[k]).classList.toggle("hidden", k!==t);
   $("tabs").querySelectorAll(".tab").forEach(b=>b.classList.toggle("on", b.dataset.t===t));
-  $("pane-dash").classList.toggle("hidden", t!=="dash" || !ROWS.length);
-  $("pane-datos").classList.toggle("hidden", t!=="datos");
-  if(t==="dash" && !ROWS.length){ // sin datos no hay tablero que mostrar
-    $("pane-datos").classList.remove("hidden");
-    $("tabs").querySelectorAll(".tab").forEach(b=>b.classList.toggle("on", b.dataset.t==="datos"));
-  }
+  if(t==="hist") renderHist();
   scrollTo({top:0,behavior:"smooth"});
 }
 $("tabs").querySelectorAll(".tab").forEach(b=>b.onclick=()=>irA(b.dataset.t));
@@ -821,9 +927,43 @@ function renderDatos(){
   $("irDash").onclick = ()=>irA("dash");
   $("csv2").onclick = exportCSV;
   renderOrigen();
+  renderDuplicadas();
   $("pub").classList.remove("hidden");
   $("pesoJson").textContent = "≈ " + Math.round(jsonDatos().length/1024) + " KB";
   $("genJson").onclick = descargarJson;
+}
+
+/* ---------- claves repetidas en el mismo corte ---------- */
+function renderDuplicadas(){
+  const el = $("dups"); if(!el) return;
+  const cnt = {};
+  ROWS.forEach(r=> (cnt[r.id] = (cnt[r.id]||0)+1));
+  const dup = Object.keys(cnt).filter(k=>cnt[k]>1);
+  if(!dup.length){ el.innerHTML=""; return; }
+  const det = dup.map(id=>{
+    const fs = ROWS.filter(r=>r.id===id);
+    // qué campos difieren entre las filas repetidas
+    const campos = [["lead","Tiempo de entrega"],["obj","Inventario objetivo"],["exi","Existencia"],
+      ["uni","Unidad"],["consA","Consumo Ant"],["catA","Estatus Ant"],["consP","Consumo Pron"],["catP","Estatus Pron"],
+      ["mar","Marca"],["sub","Subgrupo"],["buy","Comprador"]];
+    const difs = campos.filter(([k])=> new Set(fs.map(f=>String(f[k]))).size>1)
+      .map(([k,lab])=>`<b>${lab}</b>: ${fs.map(f=>{
+        const v=f[k]; const c=CATMAP[v];
+        return c ? c.label : (v===null||v===undefined||v==="" ? "—" : fmtN(typeof v==="number"?v:NaN)==="NaN"?esc(String(v)):esc(String(v)));
+      }).join(" vs ")}`);
+    return `<li><b>${esc(id)}</b> ${esc((fs[0].desc||"").replace(/^XX\*/,"").slice(0,44))} — aparece ${fs.length} veces.
+      ${difs.length?`<div class="dif">Difieren en → ${difs.join(" · ")}</div>`
+                   :`<div class="dif">Las filas son idénticas.</div>`}</li>`;
+  }).join("");
+  el.innerHTML = `<div class="alert" style="margin:0 0 16px">
+    <span class="ai">⚠</span>
+    <div>
+      <b>${dup.length} clave${dup.length>1?"s":""} aparece${dup.length>1?"n":""} repetida${dup.length>1?"s":""} en el mismo corte.</b>
+      <div class="lst">Eso las cuenta doble en los KPIs y en la tabla: el portal lee
+        <b>${ROWS.length}</b> filas pero sólo hay <b>${Object.keys(cnt).length}</b> claves distintas.
+        Conviene depurarlo en el Excel.</div>
+      <ul class="dups">${det}</ul>
+    </div></div>`;
 }
 
 /* ---------- de dónde vienen los datos ---------- */
@@ -917,7 +1057,7 @@ async function publicar(){
     const get=await fetch(`${url}?ref=${encodeURIComponent(branch)}`,{headers:H});
     if(get.status===200) sha=(await get.json()).sha;
     else if(get.status===401) return pubMsg("err","El token no es válido o expiró. Genera uno nuevo.");
-    else if(get.status===403) return pubMsg("err","El token no tiene acceso a este repositorio. Revisa <b>Repository access</b> y el permiso <b>Contents</b> del token, o dale a <b>Probar token</b> aquí abajo.");
+    else if(get.status===403) return pubMsg("err","El token no tiene permiso <b>Contents: Read and write</b> sobre este repositorio.");
     else if(get.status===404 && !(await verificaRepo(owner,repo,H))) return;
 
     const put=await fetch(url,{method:"PUT",headers:{...H,"Content-Type":"application/json"},body:JSON.stringify({
@@ -937,16 +1077,14 @@ async function publicar(){
           <li><b>Repository access</b> debe ser <b>Only select repositories</b> con
               <code>${esc(repo)}</code> marcado. Si elegiste
               <i>Public Repositories (read-only)</i>, nunca va a poder escribir.</li>
-          <li>Si el repositorio es de una <b>organización</b> y no de tu cuenta personal,
-              un administrador tiene que <b>aprobar</b> el token
-              (Organization → Settings → Personal access tokens → Pending requests).</li>
+          <li>Si el repositorio es de una <b>organización</b>, un administrador tiene que
+              <b>aprobar</b> el token (Organization → Settings → Personal access tokens → Pending requests).</li>
           <li>Que <code>${esc(owner)}</code> sea el dueño correcto del repositorio.</li>
         </ol>
         Al cambiar los permisos de un token fine-grained, GitHub los aplica de inmediato:
-        no hace falta generar uno nuevo, solo vuelve a darle a Publicar.
+        no hace falta generar uno nuevo, sólo vuelve a darle a Publicar.
         <br><br>Si se complica, usa el <b>camino manual</b>: descarga el
-        <code>datos.json</code> aquí a un lado y súbelo con <b>Add file → Upload files</b>.
-        Queda exactamente igual.</div>`);
+        <code>datos.json</code> aquí a un lado y súbelo con <b>Add file → Upload files</b>.</div>`);
     }else{
       const t=await put.text();
       pubMsg("err",`No se pudo publicar (HTTP ${put.status}). <br><small>${esc(t.slice(0,240))}</small>`);
@@ -965,38 +1103,31 @@ async function probar(){
   const li=(ok,txt)=>L.push(`<li>${ok?"✅":"❌"} ${txt}</li>`);
   pubMsg("wait","Probando el token contra GitHub…");
   try{
-    // 1. ¿el token sirve?
     const u=await fetch("https://api.github.com/user",{headers:H});
-    if(u.status===401){ return pubMsg("err","❌ <b>El token no es válido o ya expiró.</b> Genera uno nuevo en GitHub → Settings → Developer settings → Personal access tokens."); }
+    if(u.status===401) return pubMsg("err","❌ <b>El token no es válido o ya expiró.</b> Genera uno nuevo en GitHub → Settings → Developer settings → Personal access tokens.");
     if(u.ok){ const j=await u.json(); li(true,`Token válido, pertenece a <b>${esc(j.login||"?")}</b>.`); }
     else li(true,"Token aceptado por GitHub.");
 
-    // 2. ¿ve el repositorio?
     const r=await fetch(`https://api.github.com/repos/${owner}/${repo}`,{headers:H});
     if(r.status===404){
       li(false,`No ve el repositorio <code>${esc(owner)}/${esc(repo)}</code>. En el token, <b>Repository access</b> debe ser <b>Only select repositories</b> con este repo marcado — o el dueño está mal escrito.`);
       fatal=true;
-    }else if(!r.ok){
-      li(false,`GitHub respondió ${r.status} al buscar el repositorio.`); fatal=true;
-    }else{
+    }else if(!r.ok){ li(false,`GitHub respondió ${r.status} al buscar el repositorio.`); fatal=true; }
+    else{
       const j=await r.json();
       li(true,`Ve el repositorio <b>${esc(j.full_name)}</b>${j.private?" (privado)":""}.`);
       if(j.owner && j.owner.type==="Organization")
         L.push(`<li>ℹ️ Es de la organización <b>${esc(j.owner.login)}</b>. Si el token es fine-grained, un administrador tiene que aprobarlo en <i>Organization → Settings → Personal access tokens → Pending requests</i>.</li>`);
-      // 3. ¿existe la rama?
       const br=await fetch(`https://api.github.com/repos/${owner}/${repo}/branches/${encodeURIComponent(branch)}`,{headers:H});
       li(br.ok, br.ok ? `La rama <code>${esc(branch)}</code> existe.`
-                      : `No encontró la rama <code>${esc(branch)}</code>. En GitHub, arriba a la izquierda del repo, verifica si se llama <code>main</code> o <code>master</code>.`);
+                      : `No encontró la rama <code>${esc(branch)}</code>. Verifica si se llama <code>main</code> o <code>master</code>.`);
       if(!br.ok) fatal=true;
-      // 4. ¿puede leer contenidos?
       const c=await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/datos.json?ref=${encodeURIComponent(branch)}`,{headers:H});
       if(c.status===200) li(true,"Puede leer <code>datos.json</code> (ya existe en el repo).");
       else if(c.status===404) li(true,"Todavía no hay <code>datos.json</code> en el repo; se creará al publicar.");
       else li(false,`No puede leer contenidos (HTTP ${c.status}). Falta el permiso <b>Contents</b> en el token.`);
     }
-  }catch(err){
-    return pubMsg("err","Error de red al hablar con GitHub: "+esc(err.message));
-  }
+  }catch(err){ return pubMsg("err","Error de red al hablar con GitHub: "+esc(err.message)); }
   pubMsg(fatal?"err":"wait",
     `<b>Resultado de la prueba</b><ul class="diag">${L.join("")}</ul>` +
     (fatal ? "Corrige lo marcado con ❌ y vuelve a probar."
@@ -1099,8 +1230,7 @@ const legendFor = cats => cats.map(c=>
 /* ============ render maestro ============ */
 function renderAll(){ renderAlerta(); renderKpis(); renderTrend(); renderMonths(); renderCrit(); renderTable(); }
 function updateCount(){
-  const n = kpiBase().filter(r=>rProp(r)>0).length;
-  const b = $("soloProp");
+  const n = kpiBase().filter(r=>rProp(r)>0).length, b = $("soloProp");
   if(b){
     b.setAttribute("aria-pressed", state.only==="comprar");
     b.classList.toggle("on", state.only==="comprar");
@@ -1430,6 +1560,7 @@ $("seg").querySelectorAll(".segb").forEach(b=>{
     $("seg").querySelectorAll(".segb").forEach(x=>x.classList.toggle("on", x.dataset.b===BASE));
     $("baseDesc").textContent = "— " + ESC[BASE].desc;
     renderAll();
+    if(!$("pane-hist").classList.contains("hidden")) renderHist();
   };
 });
 
@@ -1454,6 +1585,370 @@ function renderAlerta(){
     renderTable(); updateCount();
     document.querySelector(".tblwrap").scrollIntoView({behavior:"smooth",block:"start"});
   };
+}
+
+
+/* ============================================================
+   Pestaña Historia — comportamiento día a día por clave
+   ============================================================ */
+let HSEL = null;          // clave seleccionada
+const MAL = new Set(["RIESGO","FALTANTE"]);
+const dParse = d => { const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||""); return m? new Date(+m[1],+m[2]-1,+m[3]) : null; };
+const diasEntre = (a,b) => { const x=dParse(a), y=dParse(b); return (x&&y) ? Math.round((y-x)/864e5) : null; };
+const fmtCorto = d => { const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||""); if(!m) return d||"—";
+  const MES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  return `${+m[3]} ${MES[+m[2]-1]}`; };
+
+const hCat = (r,b) => b==="A" ? r.catA : r.catP;
+const hMeses = (r,b) => b==="A" ? r.mesesA : r.mesesP;
+const hCons = (r,b) => b==="A" ? r.consA : r.consP;
+
+/* racha actual en riesgo/faltante; truncada=true si arranca en el primer corte del archivo */
+function racha(serie, b){
+  if(!serie.length) return null;
+  const ult = serie[serie.length-1];
+  if(!MAL.has(hCat(ult,b))) return null;
+  let i = serie.length-1;
+  while(i>0 && MAL.has(hCat(serie[i-1],b))) i--;
+  return {desde: serie[i].fecha, cortes: serie.length-i, truncada: i===0,
+          dias: diasEntre(serie[i].fecha, ult.fecha), estatus: hCat(ult,b)};
+}
+/* racha con exactamente el mismo estatus al final */
+function rachaIgual(serie, b){
+  if(!serie.length) return null;
+  const ult = serie[serie.length-1], k = hCat(ult,b);
+  let i = serie.length-1;
+  while(i>0 && hCat(serie[i-1],b)===k) i--;
+  return {desde: serie[i].fecha, cortes: serie.length-i, truncada: i===0,
+          dias: diasEntre(serie[i].fecha, ult.fecha), estatus: k};
+}
+/* cambios de estatus de una serie, en un escenario */
+function cambios(serie, b){
+  const out=[];
+  for(let i=1;i<serie.length;i++){
+    const a=hCat(serie[i-1],b), c=hCat(serie[i],b);
+    if(a!==c) out.push({fecha:serie[i].fecha, de:a, a:c, esc:b});
+  }
+  return out;
+}
+
+/* ---------- buscador ---------- */
+function initHist(){
+  const inp=$("hq"), sug=$("hsug");
+  let mk=-1;
+  const cerrar=()=>{ sug.classList.add("hidden"); mk=-1; };
+  const lista=()=>{
+    const q=inp.value.trim().toLowerCase();
+    let r=ROWS;
+    if(q) r=ROWS.filter(x=> x.id.toLowerCase().includes(q) || x.desc.toLowerCase().includes(q)
+                          || (x.mar||"").toLowerCase().includes(q) || (x.sub||"").toLowerCase().includes(q));
+    return r.slice(0,40);
+  };
+  const pinta=()=>{
+    const r=lista();
+    if(!r.length){ sug.innerHTML=`<div class="vacio">Ninguna clave coincide.</div>`; sug.classList.remove("hidden"); return; }
+    sug.innerHTML = r.map((x,i)=>{
+      const c=CATMAP[hCat(x,BASE)];
+      return `<button data-id="${esc(x.id)}" class="${i===mk?"mk":""}">
+        <span class="sid">${esc(x.id)}</span>
+        <span class="sds">${esc((x.desc||"").replace(/^XX\*/,""))}</span>
+        <span class="tag" style="--c:${cssv(c.css)}"><span class="dot"></span>${c.icon} ${c.corto}</span>
+      </button>`;}).join("");
+    sug.querySelectorAll("button").forEach(b=>b.onclick=()=>{ abrirClave(b.dataset.id); cerrar(); inp.blur(); });
+    sug.classList.remove("hidden");
+  };
+  inp.oninput = pinta;
+  inp.onfocus = pinta;
+  inp.onkeydown = e=>{
+    const r=lista();
+    if(e.key==="Escape") return cerrar();
+    if(e.key==="ArrowDown"||e.key==="ArrowUp"){
+      e.preventDefault(); mk += e.key==="ArrowDown"?1:-1;
+      if(mk<0) mk=r.length-1; if(mk>=r.length) mk=0; pinta();
+      const el=sug.querySelector(".mk"); if(el) el.scrollIntoView({block:"nearest"});
+    }
+    if(e.key==="Enter"){ e.preventDefault(); const x=r[mk<0?0:mk]; if(x){ abrirClave(x.id); cerrar(); inp.blur(); } }
+  };
+  document.addEventListener("click", e=>{ if(!$("hsearch_wrap_dummy") && !e.target.closest(".hsearch")) cerrar(); });
+  $("hprev").onclick = ()=>saltar(-1);
+  $("hnext").onclick = ()=>saltar(1);
+  $("hclose").onclick = ()=>{ HSEL=null; $("hq").value=""; renderHist(); };
+}
+function saltar(d){
+  const ids=ROWS.map(r=>r.id);
+  if(!ids.length) return;
+  let i = HSEL ? ids.indexOf(HSEL) : -1;
+  i = (i + d + ids.length) % ids.length;
+  abrirClave(ids[i]);
+}
+function abrirClave(id){ HSEL=id; renderHist(); }
+
+/* ---------- maestro ---------- */
+function renderHist(){
+  if(!ROWS.length) return;
+  const hay = !!(HSEL && HIST_CLAVE[HSEL]);
+  $("hclose").classList.toggle("hidden", !hay);
+  $("hrank").classList.toggle("hidden", hay);
+  $("hficha").classList.toggle("hidden", !hay);
+  if(hay) renderFicha(); else renderRanking();
+}
+
+/* ---------- ranking de las más añejas ---------- */
+function renderRanking(){
+  const base = kpiBase();
+  const filas = base.map(r=>{
+    const serie = HIST_CLAVE[r.id]||[];
+    return {r, serie, a: racha(serie,"A"), p: racha(serie,"P")};
+  }).filter(x=> x.a || x.p);
+  // ordena por la racha más vieja de los dos escenarios
+  filas.sort((x,y)=>{
+    const fx = [x.a&&x.a.desde, x.p&&x.p.desde].filter(Boolean).sort()[0] || "9999";
+    const fy = [y.a&&y.a.desde, y.p&&y.p.desde].filter(Boolean).sort()[0] || "9999";
+    return fx<fy ? -1 : fx>fy ? 1 : 0;
+  });
+
+  const nA = base.filter(r=>MAL.has(r.catA)).length, nP = base.filter(r=>MAL.has(r.catP)).length;
+  const cronicas = filas.filter(x=>(x.a&&x.a.truncada)||(x.p&&x.p.truncada)).length;
+
+  $("hrank").innerHTML = `
+    <div class="rank">
+      <h3>Claves que llevan más tiempo en riesgo o faltante</h3>
+      <p class="cap">Hoy hay <b>${nA}</b> en riesgo o faltante con el antecedente y <b>${nP}</b> con el pronóstico.
+        ${cronicas?`<b>${cronicas}</b> vienen así desde el primer corte del archivo.`:""}
+        Haz clic en cualquiera para ver su historia completa.</p>
+      <div class="head"><span>Clave</span><span>Descripción</span><span>Ant. · en problema desde</span><span>Pron. · en problema desde</span><span>Antecedente día a día</span></div>
+      ${filas.map(x=>{
+        const c=CATMAP[hCat(x.r,BASE)]||CATMAP.OPTIMO;
+        return `<button class="rk" data-id="${esc(x.r.id)}">
+          <span class="rid">${esc(x.r.id)}</span>
+          <span class="rds">${esc((x.r.desc||"").replace(/^XX\*/,""))}
+            <small>${esc([x.r.mar,x.r.sub,x.r.buy].filter(Boolean).join(" · "))}</small></span>
+          <span class="rde">${cellDesde(x.a, x.r.catA)}</span>
+          <span class="rde">${cellDesde(x.p, x.r.catP)}</span>
+          <span class="rmini">${banda(x.serie,"A",true)}</span>
+        </button>`;}).join("")
+      || `<div style="padding:26px;text-align:center;color:var(--muted)">Ninguna clave está en riesgo ni en faltante con los filtros actuales. 🎉</div>`}
+    </div>`;
+  $("hrank").querySelectorAll(".rk").forEach(b=>b.onclick=()=>abrirClave(b.dataset.id));
+  bindBanda($("hrank"));
+}
+function cellDesde(r, actual){
+  if(!r){
+    const c=CATMAP[actual];
+    return `<span style="color:var(--muted)">${c?c.icon+" "+c.corto:"—"}<br>sin problema</span>`;
+  }
+  const c=CATMAP[r.estatus];
+  return `<b>${c.icon} ${c.corto}</b><span title="${r.truncada
+    ? "Ya venía así en el primer corte del archivo; pudo llevar más tiempo"
+    : "Primer corte en que marcó riesgo o faltante"}">${r.truncada?"≥ ":"desde "}${fmtCorto(r.desde)}</span>`;
+}
+
+/* ---------- banda de estatus ---------- */
+function banda(serie, b, mini){
+  return `<div class="banda${mini?" mini":""}">` + serie.map(r=>{
+    const k=hCat(r,b), c=CATMAP[k];
+    return `<div class="bcell" style="--c:${c?cssv(c.css):"var(--grid)"}"
+      data-f="${r.fecha}" data-id="${esc(r.id)}" data-b="${b}"></div>`;
+  }).join("") + `</div>`;
+}
+function bindBanda(root){
+  root.querySelectorAll(".bcell").forEach(el=>{
+    el.onmousemove = e=>{
+      const serie = HIST_CLAVE[el.dataset.id]||[];
+      const r = serie.find(x=>x.fecha===el.dataset.f);
+      if(!r) return;
+      const b = el.dataset.b, c = CATMAP[hCat(r,b)];
+      showTip(`<div class="t">${fmtDate(r.fecha)} · ${ESC[b].nom}</div>
+        <div class="r"><span class="d" style="background:${cssv(c.css)}"></span>${c.icon} ${c.label}</div>
+        <div class="r">Existencia<span class="n">${fmtN(r.exi)} ${esc(r.uni||"")}</span></div>
+        <div class="r">Consumo prom.<span class="n">${fmtN(hCons(r,b))}</span></div>
+        <div class="r">Meses inv.<span class="n">${fmtN(hMeses(r,b),1)}</span></div>
+        <div class="r">🛒 Propuesta<span class="n">${fmtN(b==="A"?r.propA:r.propP)}</span></div>`, e.clientX, e.clientY);
+    };
+    el.onmouseleave = hideTip;
+  });
+}
+
+/* ---------- ficha de una clave ---------- */
+function renderFicha(){
+  const serie = HIST_CLAVE[HSEL]||[];
+  const u = serie[serie.length-1];
+  if(!u){ $("hficha").innerHTML=""; return; }
+  const ra = racha(serie,"A"), rp = racha(serie,"P");
+  const ia = rachaIgual(serie,"A"), ip = rachaIgual(serie,"P");
+
+  $("hficha").innerHTML = `
+    <div class="fhead">
+      <div style="flex:1;min-width:230px">
+        <div class="fid">${esc(u.id)}</div>
+        <div class="fds">${esc((u.desc||"").replace(/^XX\*/,""))}</div>
+        <div class="fmeta">
+          <span><b>Marca</b> ${esc(u.mar||"—")}</span><span>·</span>
+          <span><b>Subgrupo</b> ${esc(u.sub||"—")}</span><span>·</span>
+          <span><b>Comprador</b> ${esc(u.buy||"—")}</span><span>·</span>
+          <span><b>Unidad</b> ${esc(u.uni||"—")}</span><span>·</span>
+          <span><b>Objetivo</b> ${fmtN(u.obj)} meses</span><span>·</span>
+          <span><b>T. entrega</b> ${fmtN(u.lead,1)}</span>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.05em;text-transform:uppercase">Existencia hoy</div>
+        <div style="font-size:26px;font-weight:700;letter-spacing:-.02em">${fmtN(u.exi)}</div>
+        <div style="font-size:11.5px;color:var(--muted)">${esc(uniLabel(u.uni,u.exi))} · ${serie.length} cortes</div>
+      </div>
+    </div>
+
+    <div class="desde">
+      ${tarjetaDesde("A", ra, ia, u)}
+      ${tarjetaDesde("P", rp, ip, u)}
+    </div>
+
+    <div class="panel" style="margin-bottom:14px">
+      <h3>Estatus día a día</h3>
+      <p class="cap">Un cuadro por corte, del ${fmtDate(serie[0].fecha)} al ${fmtDate(u.fecha)}. Pasa el mouse para ver el detalle de cada día.</p>
+      <div class="legend">${legendFor(CATS)}</div>
+      <div class="bfila"><span class="blab">📊 Antecedente</span>${banda(serie,"A")}</div>
+      <div class="bfila"><span class="blab">🔮 Pronóstico</span>${banda(serie,"P")}</div>
+      <div class="bejes"><span></span><div class="bfechas"><span>${fmtDate(serie[0].fecha)}</span><span>${fmtDate(u.fecha)}</span></div></div>
+    </div>
+
+    <div class="hgrid">
+      <div class="panel">
+        <h3>Meses de inventario</h3>
+        <p class="cap">Cobertura corte a corte. La línea punteada es el objetivo de ${fmtN(u.obj)} meses.</p>
+        <div class="legend">
+          <span><svg width="14" height="14" viewBox="0 0 14 14">${marker("circle",7,7,cssv("--st-critical"),4.5)}</svg>📊 Antecedente</span>
+          <span><svg width="14" height="14" viewBox="0 0 14 14">${marker("diamond",7,7,cssv("--series-1"),4.5)}</svg>🔮 Pronóstico</span>
+        </div>
+        <div id="gmeses"></div>
+      </div>
+      <div class="panel">
+        <h3>Existencia</h3>
+        <p class="cap">Cómo se ha movido el inventario, en ${esc(uniLabel(u.uni,2)||"unidades")}.</p>
+        <div id="gexi"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Bitácora de cambios</h3>
+      <p class="cap">Cada vez que esta clave cambió de estatus, en cualquiera de los dos escenarios.</p>
+      <div class="bit">${bitacora(serie)}</div>
+    </div>`;
+
+  bindBanda($("hficha"));
+  gMeses(serie, u);
+  gExi(serie, u);
+}
+
+function tarjetaDesde(b, r, ig, u){
+  const nom = ESC[b].nom, cAct = CATMAP[hCat(u,b)];
+  const dd = x => `<b>${x.dias} ${x.dias===1?"día":"días"}</b>`;
+  if(!r){
+    return `<div class="dcard ok">
+      <div class="esc">${b==="A"?"📊":"🔮"} ${nom}</div>
+      <div class="est"><span class="dt"></span>${cAct.icon} ${cAct.label}</div>
+      <div class="txt">No está en riesgo ni en faltante con este escenario.
+        ${ig && !ig.truncada ? `Así desde el <b>${fmtDate(ig.desde)}</b>.` : ""}</div>
+    </div>`;
+  }
+  const c = CATMAP[r.estatus];
+  // "en problema" = riesgo o faltante seguidos; "estatus actual" = el mismo estatus seguido
+  const lineaProblema = r.truncada
+    ? `<b>En riesgo o faltante desde el primer corte del archivo (${fmtDate(r.desde)})</b> — al menos ${dd(r)} y ${r.cortes} cortes seguidos.`
+    : `<b>En riesgo o faltante desde el ${fmtDate(r.desde)}</b> — ${dd(r)} y ${r.cortes} cortes seguidos.`;
+  // sólo vale la pena separar si el estatus actual empezó después
+  const separar = ig && ig.desde !== r.desde;
+  const lineaActual = separar
+    ? `<div class="txt" style="margin-top:5px">Pasó a <b>${c.label.toLowerCase()}</b> el <b>${fmtDate(ig.desde)}</b> — ${dd(ig)} así.</div>`
+    : "";
+  return `<div class="dcard" style="--c:${cssv(c.css)}">
+    <div class="esc">${b==="A"?"📊":"🔮"} ${nom}</div>
+    <div class="est"><span class="dt"></span>${c.icon} ${c.label}</div>
+    <div class="txt">${lineaProblema}</div>
+    ${lineaActual}
+    ${r.truncada?`<div class="adv">No sabemos desde cuándo exactamente: el archivo empieza ese día, así que pudo llevar más tiempo.</div>`:""}
+  </div>`;
+}
+
+/* ---------- gráfica de meses de inventario ---------- */
+function gMeses(serie, u){
+  const W=620,H=250,P={t:16,r:16,b:34,l:40}, iw=W-P.l-P.r, ih=H-P.t-P.b;
+  const n=serie.length;
+  const vals=[...serie.map(r=>r.mesesA??0), ...serie.map(r=>r.mesesP??0), u.obj||3];
+  const max=Math.max(1,...vals)*1.15;
+  const X=i=> n<2 ? P.l+iw/2 : P.l+i*(iw/(n-1));
+  const Y=v=> P.t+ih-(Math.min(v,max)/max)*ih;
+  const step=Math.max(1,Math.ceil(max/4));
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Meses de inventario por corte">`;
+  for(let v=0;v<=max;v+=step) s+=`<line class="g-line" x1="${P.l}" y1="${Y(v)}" x2="${P.l+iw}" y2="${Y(v)}"/>
+    <text class="g-tick" x="${P.l-8}" y="${Y(v)+3.5}" text-anchor="end">${v}</text>`;
+  // objetivo
+  if(u.obj){ s+=`<line x1="${P.l}" y1="${Y(u.obj)}" x2="${P.l+iw}" y2="${Y(u.obj)}" stroke="${cssv('--st-good')}" stroke-width="2" stroke-dasharray="5 4"/>
+    <text x="${P.l+iw}" y="${Y(u.obj)-6}" text-anchor="end" fill="${cssv('--st-good')}" style="font-size:10.5px;font-weight:600">objetivo ${fmtN(u.obj)} m</text>`; }
+  [["A",cssv("--st-critical"),"circle"],["P",cssv("--series-1"),"diamond"]].forEach(([b,col,shape])=>{
+    const vv=serie.map(r=>hMeses(r,b)??0);
+    s+=`<path d="${vv.map((v,i)=>`${i?"L":"M"}${X(i)} ${Y(v)}`).join(" ")}" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+    if(n<=24) vv.forEach((v,i)=>{ s+=marker(shape,X(i),Y(v),col,4); });
+  });
+  s+=`<line class="g-axis" x1="${P.l}" y1="${P.t+ih}" x2="${P.l+iw}" y2="${P.t+ih}"/>
+    <text class="g-tick" x="${P.l}" y="${P.t+ih+17}">${fmtCorto(serie[0].fecha)}</text>
+    <text class="g-tick" x="${P.l+iw}" y="${P.t+ih+17}" text-anchor="end">${fmtCorto(u.fecha)}</text>`;
+  serie.forEach((r,i)=>{ const bw=n<2?iw:iw/(n-1);
+    s+=`<rect x="${X(i)-bw/2}" y="${P.t}" width="${bw}" height="${ih}" fill="transparent" data-i="${i}" style="cursor:crosshair"/>`; });
+  s+=`</svg>`;
+  const el=$("gmeses"); el.innerHTML=s;
+  el.querySelectorAll("rect[data-i]").forEach(rc=>{
+    rc.onmousemove=e=>{ const r=serie[+rc.dataset.i];
+      showTip(`<div class="t">${fmtDate(r.fecha)}</div>
+        <div class="r"><span class="d" style="background:${cssv('--st-critical')}"></span>Antecedente<span class="n">${fmtN(r.mesesA,1)} m</span></div>
+        <div class="r"><span class="d" style="background:${cssv('--series-1')}"></span>Pronóstico<span class="n">${fmtN(r.mesesP,1)} m</span></div>`, e.clientX, e.clientY); };
+    rc.onmouseleave=hideTip;
+  });
+}
+
+/* ---------- gráfica de existencia ---------- */
+function gExi(serie, u){
+  const W=620,H=250,P={t:16,r:16,b:34,l:48}, iw=W-P.l-P.r, ih=H-P.t-P.b;
+  const n=serie.length, vv=serie.map(r=>r.exi||0);
+  const max=Math.max(1,...vv)*1.15;
+  const X=i=> n<2 ? P.l+iw/2 : P.l+i*(iw/(n-1));
+  const Y=v=> P.t+ih-(v/max)*ih;
+  const col=cssv("--series-1");
+  const step=Math.max(1,Math.ceil(max/4));
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Existencia por corte">`;
+  for(let v=0;v<=max;v+=step) s+=`<line class="g-line" x1="${P.l}" y1="${Y(v)}" x2="${P.l+iw}" y2="${Y(v)}"/>
+    <text class="g-tick" x="${P.l-8}" y="${Y(v)+3.5}" text-anchor="end">${fmtN(v)}</text>`;
+  s+=`<path d="${vv.map((v,i)=>`${i?"L":"M"}${X(i)} ${Y(v)}`).join(" ")} L${X(n-1)} ${Y(0)} L${X(0)} ${Y(0)} Z" fill="${col}" opacity=".13"/>`;
+  s+=`<path d="${vv.map((v,i)=>`${i?"L":"M"}${X(i)} ${Y(v)}`).join(" ")}" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+  if(n<=24) vv.forEach((v,i)=>{ s+=marker("circle",X(i),Y(v),v===0?cssv("--st-critical"):col,4); });
+  s+=`<line class="g-axis" x1="${P.l}" y1="${P.t+ih}" x2="${P.l+iw}" y2="${P.t+ih}"/>
+    <text class="g-tick" x="${P.l}" y="${P.t+ih+17}">${fmtCorto(serie[0].fecha)}</text>
+    <text class="g-tick" x="${P.l+iw}" y="${P.t+ih+17}" text-anchor="end">${fmtCorto(u.fecha)}</text>`;
+  serie.forEach((r,i)=>{ const bw=n<2?iw:iw/(n-1);
+    s+=`<rect x="${X(i)-bw/2}" y="${P.t}" width="${bw}" height="${ih}" fill="transparent" data-i="${i}" style="cursor:crosshair"/>`; });
+  s+=`</svg>`;
+  const el=$("gexi"); el.innerHTML=s;
+  el.querySelectorAll("rect[data-i]").forEach(rc=>{
+    rc.onmousemove=e=>{ const r=serie[+rc.dataset.i];
+      showTip(`<div class="t">${fmtDate(r.fecha)}</div>
+        <div class="r">Existencia<span class="n">${fmtN(r.exi)} ${esc(r.uni||"")}</span></div>
+        <div class="r">Consumo Ant.<span class="n">${fmtN(r.consA)}</span></div>
+        <div class="r">Consumo Pron.<span class="n">${fmtN(r.consP)}</span></div>`, e.clientX, e.clientY); };
+    rc.onmouseleave=hideTip;
+  });
+}
+
+/* ---------- bitácora ---------- */
+function bitacora(serie){
+  const ev=[...cambios(serie,"A"), ...cambios(serie,"P")]
+    .sort((a,b)=> a.fecha<b.fecha?1 : a.fecha>b.fecha?-1 : 0);
+  if(!ev.length) return `<div class="sinc">Esta clave no ha cambiado de estatus en ninguno de los ${serie.length} cortes.</div>`;
+  const pil=k=>{ const c=CATMAP[k]; return c?`<span class="tag" style="--c:${cssv(c.css)}"><span class="dot"></span>${c.icon} ${c.corto}</span>`:"—"; };
+  return `<ol>${ev.map(e=>`<li>
+    <span class="bf">${fmtCorto(e.fecha)}</span>
+    <span class="be">${e.esc==="A"?"Ant.":"Pron."}</span>
+    <span class="bc">${pil(e.de)}<span class="fl">→</span>${pil(e.a)}</span>
+  </li>`).join("")}</ol>`;
 }
 
 /* ---------- tema ---------- */
