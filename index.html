@@ -29,7 +29,7 @@
   --grid:#e3ebf4; --axis:#c3d1e0; --ring:rgba(15,30,51,.11);
   /* estatus — validados contra superficie #ffffff */
   --st-critical:#e11d48; --st-warning:#e08c00; --st-good:#059669;
-  --series-1:#2563eb; --neutral:#6b7280;
+  --series-1:#2563eb; --neutral:#6b7280; --pron:#7c3aed;
   --shadow:0 1px 2px rgba(15,30,51,.05), 0 6px 18px rgba(15,30,51,.06);
 }
 :root[data-theme="dark"]{
@@ -39,7 +39,7 @@
   --grid:#1e2c44; --axis:#2c3d59; --ring:rgba(190,215,245,.13);
   /* estatus — validados contra superficie #111a2b */
   --st-critical:#ec4159; --st-warning:#c68600; --st-good:#0fa172;
-  --series-1:#4589ee; --neutral:#868c95;
+  --series-1:#4589ee; --neutral:#868c95; --pron:#a78bfa;
   --shadow:0 1px 2px rgba(0,0,0,.5), 0 6px 20px rgba(0,0,0,.4);
 }
 *{box-sizing:border-box}
@@ -260,6 +260,14 @@ p.secp{margin:0 0 11px;font-size:12.5px;color:var(--muted)}
 .maptbl code{background:var(--raised);border:1px solid var(--ring);border-radius:5px;padding:1px 6px;font-size:11.5px}
 .maptbl .falta{color:var(--st-critical);font-weight:600}
 .maptbl .calc{color:var(--st-good);font-weight:600;cursor:help}
+.reglas{margin:6px 0 0;font-size:12.5px;color:var(--ink-2);line-height:1.65}
+.reglas code{background:var(--raised);border:1px solid var(--ring);border-radius:5px;padding:1px 5px;font-size:11.5px}
+.aviso-sin{margin-top:11px;padding:10px 12px;border-radius:9px;font-size:12.5px;line-height:1.6;
+  background:color-mix(in srgb,var(--st-warning) 10%,var(--surface));
+  border:1px solid color-mix(in srgb,var(--st-warning) 38%,transparent)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.chip2{font-size:11.5px;font-variant-numeric:tabular-nums;font-weight:600;padding:2px 7px;
+  border-radius:6px;background:var(--surface);border:1px solid var(--ring);cursor:help}
 .maptbl .grupo td{padding-top:13px;font-size:10.5px;font-weight:700;letter-spacing:.05em;
   text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--axis)}
 .req{font-size:12.5px;color:var(--ink-2);line-height:1.6}
@@ -366,6 +374,83 @@ ul.dups .dif{color:var(--muted);font-size:11.5px;margin-top:1px}
 .legend span{display:inline-flex;align-items:center;gap:5px}
 .legend svg{flex:none}
 .note{font-size:11.5px;color:var(--muted);margin:8px 0 4px;padding:8px 10px;background:var(--raised);border-radius:8px;border:1px solid var(--ring)}
+
+/* ---------- panel mes a mes en la tabla ---------- */
+tr.clic td{cursor:pointer}
+tr.abierta td{background:color-mix(in srgb,var(--series-1) 7%,var(--surface)) !important;border-bottom-color:transparent}
+tr.abierta td:first-child{box-shadow:inset 3px 0 0 var(--series-1)}
+.caret{display:inline-block;width:11px;color:var(--muted);font-size:9px;transition:transform .12s}
+tr.abierta .caret{color:var(--series-1);transform:rotate(90deg)}
+td.panel-td{padding:0 !important;background:var(--raised) !important;border-bottom:1px solid var(--axis)}
+.exp{padding:15px 18px 17px;border-left:3px solid var(--series-1)}
+.exphead{display:flex;gap:14px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
+.exp h4{margin:0 0 2px;font-size:13.5px;font-weight:680}
+.exp .cap{margin:0 0 11px;font-size:12px;color:var(--muted)}
+.exp .sinmes{font-size:13px;color:var(--ink-2);padding:6px 0;line-height:1.6}
+.segm{display:inline-flex;background:var(--raised);border:1px solid var(--ring);border-radius:8px;padding:2px;gap:2px;flex:none}
+.segb2{font:inherit;font-size:12px;font-weight:600;cursor:pointer;border:0;background:transparent;
+  color:var(--ink-2);padding:4px 11px;border-radius:6px}
+.segb2.on{background:var(--surface);color:var(--series-1);box-shadow:0 1px 3px rgba(15,30,51,.10)}
+.expgrid{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:18px;align-items:start}
+@media(max-width:1150px){.expgrid{grid-template-columns:1fr}}
+.ov{overflow-x:auto}
+.mm{border-collapse:separate;border-spacing:0;font-size:12.5px;background:var(--surface);
+  border:1px solid var(--ring);border-radius:10px;overflow:hidden}
+.mm th,.mm td{padding:6px 9px;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;
+  border-bottom:1px solid var(--grid)}
+.mm thead th{font-size:11px;font-weight:700;color:var(--ink-2);background:var(--raised);
+  border-bottom:1px solid var(--axis);text-align:center}
+.mm tbody tr:last-child td{border-bottom:0}
+.mm .anio{text-align:left;font-weight:680;background:var(--raised);border-right:1px solid var(--axis)}
+.mm .tot{border-left:1px solid var(--axis);font-weight:650}
+.mm .prom{font-weight:700}
+.mm td.v0{color:var(--muted)}
+.mm td.pre,.mm td.na{color:var(--axis)}
+.mm td.imp{font-style:italic}
+.mm td.bA{background:color-mix(in srgb,var(--series-1) 15%,var(--surface));
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--series-1) 35%,transparent);font-weight:700}
+.mm td.bP{background:color-mix(in srgb,var(--pron) 15%,var(--surface));
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--pron) 35%,transparent);font-weight:700}
+.vertwrap{max-height:330px;overflow:auto;border:1px solid var(--ring);border-radius:10px;
+  width:max-content;max-width:100%}
+.vert{border-collapse:separate;border-spacing:0;font-size:12.5px;background:var(--surface);
+  width:auto;min-width:340px}
+.vert thead th{position:sticky;top:0;z-index:1}
+.vert th,.vert td{padding:5px 11px;border-bottom:1px solid var(--grid);white-space:nowrap}
+.vert thead th{font-size:11px;font-weight:700;color:var(--ink-2);background:var(--raised);
+  border-bottom:1px solid var(--axis);text-align:right}
+.vert thead th:first-child{text-align:left}
+.vert td{text-align:right;font-variant-numeric:tabular-nums}
+.vert td:first-child,.vert td:last-child{text-align:left;font-variant-numeric:normal}
+.vert td:nth-child(2){min-width:120px}
+.vert td:last-child{min-width:110px}
+.vert td:first-child{font-weight:600;color:var(--ink-2)}
+.vert tr.mA td{background:color-mix(in srgb,var(--series-1) 11%,var(--surface))}
+.vert tr.mP td{background:color-mix(in srgb,var(--pron) 11%,var(--surface))}
+.vert .pre{color:var(--muted);font-style:italic}
+.vert td.v0{color:var(--muted)}
+.imp2{color:var(--muted);font-style:italic;font-size:10.5px}
+.et{font-size:10px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
+  padding:2px 6px;border-radius:999px}
+.et.a{background:color-mix(in srgb,var(--series-1) 16%,var(--surface));color:var(--series-1)}
+.et.p{background:color-mix(in srgb,var(--pron) 16%,var(--surface));color:var(--pron)}
+.leg{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-2);margin:10px 0 0;align-items:center}
+.leg span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:13px;height:13px;border-radius:3px;flex:none}
+.sw.a{background:color-mix(in srgb,var(--series-1) 25%,var(--surface));
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--series-1) 45%,transparent)}
+.sw.p{background:color-mix(in srgb,var(--pron) 25%,var(--surface));
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--pron) 45%,transparent)}
+.sw.n{background:var(--raised);box-shadow:inset 0 0 0 1px var(--axis)}
+.resu{background:var(--surface);border:1px solid var(--ring);border-radius:10px;padding:13px 15px;font-size:12.5px}
+.resu dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px}
+.resu dt{color:var(--muted);white-space:nowrap}
+.resu dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.resu .sep{grid-column:1/-1;border-top:1px solid var(--grid);margin:4px 0}
+.resu .nota{margin-top:10px;padding-top:9px;border-top:1px solid var(--grid);
+  color:var(--ink-2);font-size:11.5px;line-height:1.55;font-weight:400}
+.resu .formula{margin-top:8px;font-size:11px;color:var(--muted);line-height:1.5;
+  font-variant-numeric:tabular-nums}
 
 /* ---------- filters ---------- */
 .filters{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
@@ -486,6 +571,7 @@ tfoot td{padding:10px 12px;font-size:12px;color:var(--muted);border:0}
 </div>
 
 <div class="wrap" id="pane-datos">
+  <div id="calcinfo"></div>
   <div id="dups"></div>
   <div id="origen"></div>
 
@@ -644,7 +730,8 @@ const CATS = [
   {key:"RIESGO",         label:"Riesgo",            corto:"Riesgo",     icon:"⚠️", css:"--st-warning",  shape:"triangle",desc:"Cobertura por debajo del objetivo"},
   {key:"OPTIMO",         label:"Óptimo",            corto:"Óptimo",     icon:"✅", css:"--st-good",     shape:"square", desc:"Dentro del objetivo"},
   {key:"SOBREINVENTARIO",label:"Sobre inventario",  corto:"Sobre inv.", icon:"⬆️", css:"--series-1",    shape:"diamond",desc:"Cobertura arriba del objetivo"},
-  {key:"SINCONSUMO",     label:"Sin consumo",       corto:"S/consumo",  icon:"○",  css:"--neutral",     shape:"cross",  desc:"Sin consumo promedio registrado"}
+  {key:"SINCONSUMO",     label:"Sin consumo",       corto:"S/consumo",  icon:"○",  css:"--neutral",     shape:"cross",  desc:"Vendió alguna vez, pero cero en el periodo que se promedia"},
+  {key:"SINHISTORIA",    label:"Sin historia",      corto:"S/historia", icon:"❔", css:"--muted",       shape:"cross",  desc:"La clave no aparece en la hoja Consumo mensual: no hay con qué calcular"}
 ];
 const CATMAP = Object.fromEntries(CATS.map(c=>[c.key,c]));
 const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
@@ -667,6 +754,91 @@ let ROWS = [], DATES = [], LATEST = null, HIST = {};
 let META = null;   // {archivo, hoja, headers, mapa, filas, claves, origen}
 let AOA = null, HOJA = "";   // snapshot crudo, para poder publicarlo al repo
 let PROP_CALC = {A:false, P:false, nA:0, nP:0};
+let MENSUAL = null;   // {hoja, meses:["2025-01",...], filas:{clave:[v|null,...]}, ultimo:"2026-09"}
+
+/* ======================================================================
+   Parámetros del cálculo. El portal ya NO usa las columnas de estatus,
+   consumo ni propuesta del Excel: las calcula con la hoja mensual.
+   ====================================================================== */
+const REGLAS = {
+  nDesde: "objetivo",      // los meses que promedia = Inventario objetivo de cada clave
+  ceroTrasPrimeraVenta: true,
+  riesgoFactorEntrega: 2.1,   // riesgo si cobertura < 2.1 × tiempo de entrega
+  sobreMargen: 0.5            // sobre inventario si cobertura > objetivo + 0.5
+};
+function reglasTexto(){
+  return `Promedio de los últimos <b>N</b> meses cerrados, donde <b>N = inventario objetivo</b>
+    de cada clave. El pronóstico toma los mismos N meses empezando el mes en curso
+    <b>del año pasado</b>. Un mes sin venta cuenta como <b>cero</b>, pero sólo a partir de la
+    primera venta registrada: antes de eso la clave no existía y no promedia.
+    <br>Cobertura = existencia ÷ consumo. <b>Faltante</b> si la existencia es 0 ·
+    <b>Riesgo</b> si la cobertura es menor a ${REGLAS.riesgoFactorEntrega} × tiempo de entrega ·
+    <b>Sobre inventario</b> si pasa de objetivo + ${REGLAS.sobreMargen} · <b>Óptimo</b> en medio.`;
+}
+
+const mShift = (m,k)=>{ const y=+m.slice(0,4), mo=+m.slice(5)-1, t=y*12+mo+k;
+  return String(Math.floor(t/12)).padStart(4,"0")+"-"+String(t%12+1).padStart(2,"0"); };
+
+/* serie con los ceros ya resueltos: null antes de la primera venta, 0 después */
+function serieEfectiva(vals, hasta){
+  let first=-1;
+  for(let i=0;i<vals.length;i++) if(vals[i]!==null&&vals[i]!==undefined&&vals[i]!==""){ first=i; break; }
+  if(first<0) return null;
+  const tope = (hasta!==undefined && hasta!==null) ? hasta
+             : (MENSUAL ? MENSUAL.idx[MENSUAL.ultimo] : vals.length-1);
+  return vals.map((v,i)=>{
+    if(i<first) return null;            // la clave todavía no existía
+    if(i>tope)  return null;            // mes aún no cerrado / sin cargar
+    return (v===null||v===undefined||v==="") ? 0 : +v;
+  });
+}
+function ventana(eff, iniMes, n, idx){
+  const xs=[], meses=[];
+  for(let k=0;k<n;k++){
+    const m=mShift(iniMes,k), i=idx[m];
+    if(i===undefined) continue;
+    if(eff[i]!==null && eff[i]!==undefined){ xs.push(eff[i]); meses.push(m); }
+  }
+  return xs.length ? {prom: xs.reduce((a,b)=>a+b,0)/xs.length, n:xs.length, meses} : null;
+}
+function clasifica(meses, cons, entr, obj){
+  if(cons===null) return null;              // sin historia en ese periodo
+  if(cons===0)    return "SINCONSUMO";
+  if(!meses)      return "FALTANTE";
+  if(meses < REGLAS.riesgoFactorEntrega*(entr||0)) return "RIESGO";
+  if(meses > (obj||0)+REGLAS.sobreMargen)          return "SOBREINVENTARIO";
+  return "OPTIMO";
+}
+/* recalcula consumo, cobertura, estatus y propuesta de una fila usando la hoja mensual */
+function recalcula(r){
+  r.calc = null;
+  if(!MENSUAL) return;
+  const sinDatos = ()=>{
+    r.sinMensual = true;
+    r.consA = r.consP = r.mesesA = r.mesesP = r.propA = r.propP = null;
+    r.catA = r.catP = "SINHISTORIA";
+  };
+  const vals = MENSUAL.filas[r.id];
+  if(!vals){ sinDatos(); return; }
+  const eff = serieEfectiva(vals);
+  if(!eff){ sinDatos(); return; }
+  const N = Math.max(1, Math.round(r.obj || 3));
+  const cierre = MENSUAL.ultimo;                 // último mes cerrado con datos
+  const iniA = mShift(cierre, -(N-1));           // N meses terminando en el cierre
+  const iniP = mShift(cierre, -11);              // los que vienen, del año pasado
+  const A = ventana(eff, iniA, N, MENSUAL.idx);
+  const P = ventana(eff, iniP, N, MENSUAL.idx);
+  const cob = c => (c===null||c===0) ? null : (r.exi||0)/c;
+  r.consA = A ? Math.round(A.prom*10)/10 : null;
+  r.consP = P ? Math.round(P.prom*10)/10 : null;
+  r.mesesA = A ? (A.prom===0 ? null : (r.exi||0)/A.prom) : null;
+  r.mesesP = P ? (P.prom===0 ? null : (r.exi||0)/P.prom) : null;
+  r.catA = clasifica(r.mesesA, r.consA, r.lead, r.obj) || "SINHISTORIA";
+  r.catP = clasifica(r.mesesP, r.consP, r.lead, r.obj) || "SINHISTORIA";
+  r.propA = r.consA ? propuesta(r.obj, r.consA, r.exi) : (r.consA===0 ? 0 : null);
+  r.propP = r.consP ? propuesta(r.obj, r.consP, r.exi) : (r.consP===0 ? 0 : null);
+  r.calc = {N, A, P, iniA, iniP, cierre, eff};
+}
 let HIST_CLAVE = {};          // id -> filas de todos los cortes, ordenadas por fecha
 /* misma fórmula que el Excel */
 function propuesta(obj, cons, exi){
@@ -680,16 +852,16 @@ const state = {cat:"", buy:"", mar:"", sub:"", q:"", only:""};
 /* escenario activo: "A" = antecedente (4 meses anteriores), "P" = pronóstico (mismos 4 meses del año pasado) */
 let BASE = "A";
 const ESC = {
-  A:{key:"A", nom:"Antecedente", corto:"Ant.", desc:"consumo real de los 4 meses anteriores"},
-  P:{key:"P", nom:"Pronóstico",  corto:"Pron.", desc:"consumo de los siguientes 4 meses, del año anterior"}
+  A:{key:"A", nom:"Antecedente", corto:"Ant.", desc:"consumo real de los últimos N meses cerrados (N = inventario objetivo)"},
+  P:{key:"P", nom:"Pronóstico",  corto:"Pron.", desc:"los mismos N meses del año pasado, contados desde el mes en curso"}
 };
 const rCat   = r => BASE==="A" ? r.catA   : r.catP;
 const rCons  = r => BASE==="A" ? r.consA  : r.consP;
 const rMeses = r => BASE==="A" ? r.mesesA : r.mesesP;
 const cambia = r => r.catA && r.catP && r.catA!==r.catP;
-const RANK = {SINCONSUMO:0, SOBREINVENTARIO:1, OPTIMO:2, RIESGO:3, FALTANTE:4};
+const RANK = {SINHISTORIA:-1, SINCONSUMO:0, SOBREINVENTARIO:1, OPTIMO:2, RIESGO:3, FALTANTE:4};
 /* empeora = el pronóstico la manda a riesgo o faltante y el antecedente no la tenía ahí */
-const empeora = r => cambia(r) && RANK[r.catP]>=3 && RANK[r.catA]<3;
+const empeora = r => cambia(r) && r.catA!=="SINHISTORIA" && r.catP!=="SINHISTORIA" && RANK[r.catP]>=3 && RANK[r.catA]<3;
 
 /* ============ carga de archivo ============ */
 const $ = id => document.getElementById(id);
@@ -785,7 +957,55 @@ function ingest(wb){
   const hoja = pickSheet(wb);
   const sh = wb.Sheets[hoja];
   const aoa = XLSX.utils.sheet_to_json(sh,{header:1,defval:null,blankrows:false});
+  MENSUAL = leeMensual(wb);
   return ingestAOA(aoa, hoja, wb.SheetNames);
+}
+
+/* ---- hoja de consumo mes a mes ---- */
+const esMes = v => typeof v==="string" && /^\d{4}-\d{2}$/.test(v.trim());
+function leeMensual(wb){
+  const nom = wb.SheetNames.find(n=>{
+    const x = norm(n);
+    return x.includes("CONSUMOMENSUAL") || x.includes("CONSUMOSMENSUALES") || x.includes("VENTASMENSUALES");
+  });
+  if(!nom) return null;
+  const aoa = XLSX.utils.sheet_to_json(wb.Sheets[nom], {header:1, defval:null, blankrows:false});
+  return armaMensual(aoa, nom);
+}
+function armaMensual(aoa, nom){
+  if(!aoa || !aoa.length) return null;
+  // la fila de encabezados es la que tiene CLAVE y al menos una columna AAAA-MM
+  let h=-1;
+  for(let i=0;i<Math.min(aoa.length,40);i++){
+    const f=aoa[i]||[];
+    if(f.some(v=>norm(v)==="CLAVE") && f.some(esMes)){ h=i; break; }
+  }
+  if(h<0) return null;
+  const hdr=aoa[h];
+  const cCl = hdr.findIndex(v=>norm(v)==="CLAVE");
+  const meses=[], cols=[];
+  hdr.forEach((v,j)=>{ if(esMes(v)){ meses.push(String(v).trim()); cols.push(j); } });
+  if(!meses.length || cCl<0) return null;
+  const orden = meses.map((m,k)=>[m,cols[k]]).sort((a,b)=> a[0]<b[0]?-1:1);
+  const M = orden.map(x=>x[0]), C = orden.map(x=>x[1]);
+  const idx = Object.fromEntries(M.map((m,k)=>[m,k]));
+  const filas={};
+  for(let i=h+1;i<aoa.length;i++){
+    const f=aoa[i]; if(!f) continue;
+    const id=f[cCl];
+    if(id===null||id===undefined||String(id).trim()==="") continue;
+    filas[String(id).trim()] = C.map(j=>{
+      const v=f[j];
+      return (v===null||v===undefined||v==="") ? null : (typeof v==="number" ? v : (isFinite(parseFloat(v))?parseFloat(v):null));
+    });
+  }
+  // último mes cerrado = el más reciente con dato en alguna clave
+  let ultimo=null;
+  for(let k=M.length-1;k>=0;k--){
+    if(Object.values(filas).some(v=>v[k]!==null)){ ultimo=M[k]; break; }
+  }
+  if(!ultimo) return null;
+  return {hoja:nom, meses:M, idx, filas, ultimo, claves:Object.keys(filas).length};
 }
 function ingestAOA(aoa, hoja, hojas){
   if(!aoa || !aoa.length) return alert("La hoja está vacía.");
@@ -801,7 +1021,7 @@ function ingestAOA(aoa, hoja, hojas){
     const catA = catOf(r[M.catA]);
     const catP = M.catP!==undefined ? catOf(r[M.catP]) : null;
     if(id===null||id===undefined||id==="") continue;
-    if(!catA && !catP) continue;
+    if(!catA && !catP && !MENSUAL) continue;
     all.push({
       fecha: M.fecha!==undefined ? dkey(r[M.fecha]) : "único",
       id: String(id).trim(),
@@ -836,12 +1056,16 @@ function ingestAOA(aoa, hoja, hojas){
     all.filter(r=>r.fecha===d).forEach(r=>{ if(r.catA)A[r.catA]++; if(r.catP)P[r.catP]++; });
     HIST[d]={A,P};
   }
-  // Propuesta de compra: se usa la columna del Excel si viene; si falta (o viene vacía en
-  // cortes viejos) se calcula igual que el Excel -> max(0, objetivo × consumo − existencia)
+  // El portal calcula consumo, cobertura, estatus y propuesta con la hoja mensual.
+  // Si no hay hoja mensual, se cae a lo que traiga el Excel (comportamiento anterior).
   PROP_CALC = {A: M.propA===undefined, P: M.propP===undefined, nA:0, nP:0};
-  for(const r of all){
-    if(r.propA===null){ r.propA = propuesta(r.obj, r.consA, r.exi); PROP_CALC.nA++; }
-    if(r.propP===null){ r.propP = propuesta(r.obj, r.consP, r.exi); PROP_CALC.nP++; }
+  if(MENSUAL){
+    for(const r of all) recalcula(r);
+  }else{
+    for(const r of all){
+      if(r.propA===null){ r.propA = propuesta(r.obj, r.consA, r.exi); PROP_CALC.nA++; }
+      if(r.propP===null){ r.propP = propuesta(r.obj, r.consP, r.exi); PROP_CALC.nP++; }
+    }
   }
 
   HIST_CLAVE = {};
@@ -873,6 +1097,16 @@ async function cargarDelRepo(){
     const d = await res.json();
     if(!d || !Array.isArray(d.filas) || d.filas.length<2) throw new Error("formato");
     META = {archivo: d.archivo || DATOS_URL, origen:"repo", generado: d.generado || null, bytes:null};
+    MENSUAL = null;
+    if(d.mensual && d.mensual.meses && d.mensual.filas){
+      const M=d.mensual.meses, idx=Object.fromEntries(M.map((m,k)=>[m,k]));
+      let ultimo=null;
+      for(let k=M.length-1;k>=0;k--){
+        if(Object.values(d.mensual.filas).some(v=>v[k]!==null && v[k]!==undefined)){ ultimo=M[k]; break; }
+      }
+      if(ultimo) MENSUAL = {hoja:d.mensual.hoja||"Consumo mensual", meses:M, idx,
+                            filas:d.mensual.filas, ultimo, claves:Object.keys(d.mensual.filas).length};
+    }
     ingestAOA(d.filas, d.hoja || "Stock_compras acumulado", d.hojas);
     return true;
   }catch(err){
@@ -950,10 +1184,47 @@ function renderDatos(){
   $("irDash").onclick = ()=>irA("dash");
   $("csv2").onclick = exportCSV;
   renderOrigen();
+  renderCalcInfo();
   renderDuplicadas();
   $("pub").classList.remove("hidden");
   $("pesoJson").textContent = "≈ " + Math.round(jsonDatos().length/1024) + " KB";
   $("genJson").onclick = descargarJson;
+}
+
+/* ---------- cómo se calculó: hoja mensual y reglas ---------- */
+function renderCalcInfo(){
+  const el=$("calcinfo"); if(!el) return;
+  if(!MENSUAL){
+    el.innerHTML = `<div class="alert" style="margin:0 0 16px">
+      <span class="ai">⚠</span>
+      <div><b>No encontré la hoja <code>Consumo mensual</code> en el archivo.</b>
+      <div class="lst">Sin ella el portal no puede calcular consumo, estatus ni propuesta, así que
+        se quedó con lo que traía el Excel. Agrega la hoja y vuelve a cargarlo.</div></div></div>`;
+    return;
+  }
+  const sin = ROWS.filter(r=>r.sinMensual);
+  const sinVent = ROWS.filter(r=>!r.sinMensual && (r.catA==="SINHISTORIA"||r.catP==="SINHISTORIA"));
+  el.innerHTML = `<div class="okbar" style="margin:0 0 14px">
+      <span>🧮</span>
+      <div><b>El portal calcula el estatus, no lo lee del Excel.</b>
+      <div class="sub">Hoja <b>${esc(MENSUAL.hoja)}</b> · ${MENSUAL.meses.length} meses
+        (${mLab(MENSUAL.meses[0])} a ${mLab(MENSUAL.meses[MENSUAL.meses.length-1])}) ·
+        ${fmtN(MENSUAL.claves)} claves · último mes cerrado <b>${mLab(MENSUAL.ultimo)}</b>.</div></div>
+    </div>
+    <div class="panel" style="margin:0 0 16px">
+      <h3>Cómo se calcula</h3>
+      <p class="reglas">${reglasTexto()}</p>
+      <p class="reglas" style="margin-top:9px">Las columnas <code>Consumo promedio Ant</code>,
+        <code>Estatus Ant.</code>, <code>Propuesta Ant.</code> y sus equivalentes del pronóstico
+        <b>ya no se usan</b>: quedan en el archivo pero el portal las ignora.</p>
+      ${sin.length ? `<div class="aviso-sin"><b>${sin.length} clave${sin.length>1?"s":""} sin historia mensual</b>
+        — no aparecen en la hoja, así que no hay con qué calcularlas. Salen marcadas como
+        <b>Sin historia</b> en el tablero:<div class="chips">${
+        sin.map(r=>`<span class="chip2" title="${esc(r.desc||"")}">${esc(r.id)}</span>`).join("")}</div></div>` : ""}
+      ${sinVent.length ? `<p class="reglas" style="margin-top:9px"><b>${sinVent.length} claves</b>
+        sí tienen historia, pero no en uno de los dos periodos (empezaron a venderse después),
+        así que ese escenario queda sin estatus.</p>` : ""}
+    </div>`;
 }
 
 /* ---------- claves repetidas en el mismo corte ---------- */
@@ -1022,7 +1293,8 @@ function jsonDatos(){
     generado:new Date().toISOString(),
     archivo: META&&META.archivo || "Stock compras corporativas.xlsx",
     hoja: HOJA, hojas: META&&META.hojas || [HOJA],
-    filas
+    filas,
+    mensual: MENSUAL ? {hoja:MENSUAL.hoja, meses:MENSUAL.meses, filas:MENSUAL.filas} : null
   });
 }
 function descargarJson(){
@@ -1545,14 +1817,19 @@ function renderTable(){
   $("thead").innerHTML = `
     <tr class="grp">
       <th colspan="${pre.length}"></th>
-      <th colspan="3" class="gA ${BASE==="A"?"act":""}">📊 Antecedente<span>4 meses anteriores</span></th>
-      <th colspan="3" class="gP ${BASE==="P"?"act":""}">🔮 Pronóstico<span>mismos 4 meses, año pasado</span></th>
+      <th colspan="3" class="gA ${BASE==="A"?"act":""}">📊 Antecedente<span id="subA">últimos N meses</span></th>
+      <th colspan="3" class="gP ${BASE==="P"?"act":""}">🔮 Pronóstico<span id="subP">los mismos N, año pasado</span></th>
       <th colspan="${mid.length}"></th>
       <th colspan="2" class="gPr" title="Cuánto pedir de cada clave, en su unidad mínima: inventario objetivo × consumo promedio − existencia">🛒 Propuesta<span>unidad mínima</span></th>
     </tr>
     <tr>${COLS.map(c=>
       `<th data-k="${c.k}" class="${c.cls==='num'?'num ':''}${c.p?'pr ':''}${c.g?('g'+c.g+(BASE===c.g?' act':'')):''}">${c.t} <span class="ar">${sortKey===c.k?(sortDir>0?"▲":"▼"):""}</span></th>`
     ).join("")}</tr>`;
+  if(MENSUAL){
+    const sa=$("subA"), sp=$("subP");
+    if(sa) sa.textContent = "N meses al "+mLab(MENSUAL.ultimo);
+    if(sp) sp.textContent = "los mismos N, año pasado";
+  }
   $("thead").querySelectorAll("th[data-k]").forEach(h=>h.onclick=()=>{
     const k=h.dataset.k;
     if(sortKey===k) sortDir*=-1; else {sortKey=k; sortDir=1;}
@@ -1579,8 +1856,9 @@ function renderTable(){
   $("tbody").innerHTML = rows.map(r=>{
     const ch=cambia(r), emp=empeora(r);
     const mk = ch ? `<span class="cambia${emp?" bad":""}" title="${emp?"Empeora con el pronóstico: ":"Cambia de estatus: "}${CATMAP[r.catA].label} → ${CATMAP[r.catP].label}">⇄</span>` : "";
-    return `<tr${emp?' class="rowbad"':''}>
-      <td class="id">${esc(r.id)}</td>
+    const ab = ABIERTAS.has(r.id);
+    return `<tr class="${emp?"rowbad ":""}clic${ab?" abierta":""}" data-id="${esc(r.id)}">
+      <td class="id"><span class="caret">▶</span> ${esc(r.id)}</td>
       <td class="desc">${esc((r.desc||"").replace(/^XX\*/,""))}</td>
       <td class="num">${fmtN(r.exi)}</td>
       <td class="uni">${esc(r.uni)}</td>
@@ -1597,8 +1875,148 @@ function renderTable(){
       <td>${esc(r.sub)}</td>
       <td class="num pr gA${BASE==="A"?" act":""}">${celdaProp(r.propA)}</td>
       <td class="num pr gP${BASE==="P"?" act":""}">${celdaProp(r.propP)}</td>
-    </tr>`;
+    </tr>` + (ab ? panelMes(r) : "");
   }).join("") || `<tr><td colspan="${COLS.length}" style="padding:26px;text-align:center;color:var(--muted)">Sin resultados con estos filtros.</td></tr>`;
+
+  $("tbody").querySelectorAll("tr.clic").forEach(tr=>{
+    tr.onclick = e=>{
+      if(e.target.closest("a,button")) return;
+      const id=tr.dataset.id;
+      ABIERTAS.has(id) ? ABIERTAS.delete(id) : ABIERTAS.add(id);
+      renderTable();
+    };
+  });
+  $("tbody").querySelectorAll("[data-vista]").forEach(b=>{
+    b.onclick = e=>{ e.stopPropagation(); VISTA_MES = b.dataset.vista; renderTable(); };
+  });
+}
+
+/* ============ panel de consumo mes a mes ============ */
+const ABIERTAS = new Set();
+let VISTA_MES = "matriz";          // "matriz" | "lista"
+const MESC = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+
+function panelMes(r){
+  const nCols = COLS.length;
+  if(!MENSUAL) return `<tr class="fila-exp"><td class="panel-td" colspan="${nCols}"><div class="exp">
+    <div class="sinmes">El archivo no trae la hoja <b>Consumo mensual</b>, así que no hay desglose
+    por mes. Agrégala al Excel y vuelve a cargarlo.</div></div></td></tr>`;
+  const vals = MENSUAL.filas[r.id];
+  if(!vals) return `<tr class="fila-exp"><td class="panel-td" colspan="${nCols}"><div class="exp">
+    <div class="sinmes">La clave <b>${esc(r.id)}</b> no aparece en la hoja <b>Consumo mensual</b>.
+    Sin historia no se puede calcular consumo, estatus ni propuesta.</div></div></td></tr>`;
+
+  const c = r.calc;
+  const cuerpo = VISTA_MES==="matriz" ? matrizMes(r, vals) : listaMes(r, vals);
+  return `<tr class="fila-exp"><td class="panel-td" colspan="${nCols}"><div class="exp">
+    <div class="expgrid">
+      <div>
+        <div class="exphead">
+          <div>
+            <h4>Consumo mes a mes — ${esc(r.id)} ${esc((r.desc||"").replace(/^XX\*/,""))}</h4>
+            <p class="cap">En ${esc((r.uni||"unidades").toLowerCase())}. Sombreado: los meses que
+              entran a cada escenario.</p>
+          </div>
+          <div class="segm">
+            <button class="segb2${VISTA_MES==="matriz"?" on":""}" data-vista="matriz">Matriz</button>
+            <button class="segb2${VISTA_MES==="lista"?" on":""}" data-vista="lista">Lista</button>
+          </div>
+        </div>
+        <div class="ov">${cuerpo}</div>
+        <div class="leg">
+          <span><i class="sw a"></i> Antecedente${c&&c.A?` · ${c.A.meses.map(mLab).join(", ")} → ${fmtN(r.consA)}/mes`:""}</span>
+          <span><i class="sw p"></i> Pronóstico${c&&c.P?` · ${c.P.meses.map(mLab).join(", ")} → ${fmtN(r.consP)}/mes`:""}</span>
+          <span><i class="sw n"></i> Antes de la primera venta (no promedia)</span>
+        </div>
+      </div>
+      <div class="resu">
+        <dl>
+          <dt>Existencia</dt><dd>${fmtN(r.exi)} ${esc(r.uni||"")}</dd>
+          <dt>Inventario objetivo</dt><dd>${fmtN(r.obj)} meses</dd>
+          <dt>Tiempo de entrega</dt><dd>${fmtN(r.lead,1)}</dd>
+          <dt>Meses que promedia (N)</dt><dd>${c?c.N:"—"}</dd>
+          <div class="sep"></div>
+          <dt>Consumo antecedente</dt><dd>${fmtN(r.consA)}/mes</dd>
+          <dt>Cobertura</dt><dd>${r.mesesA===null?"—":fmtN(r.mesesA,1)+" meses"}</dd>
+          <dt>Estatus</dt><dd>${r.catA?CATMAP[r.catA].label:"sin historia"}</dd>
+          <dt>Propuesta</dt><dd style="color:var(--st-good)">${r.propA===null?"—":fmtN(r.propA)}</dd>
+          <div class="sep"></div>
+          <dt>Consumo pronóstico</dt><dd>${fmtN(r.consP)}/mes</dd>
+          <dt>Cobertura</dt><dd>${r.mesesP===null?"—":fmtN(r.mesesP,1)+" meses"}</dd>
+          <dt>Estatus</dt><dd>${r.catP?CATMAP[r.catP].label:"sin historia"}</dd>
+          <dt>Propuesta</dt><dd>${r.propP===null?"—":fmtN(r.propP)}</dd>
+        </dl>
+        <div class="nota">${notaClave(r)}</div>
+        <div class="formula">Propuesta = objetivo × consumo − existencia
+          ${r.consA?`<br>= ${fmtN(r.obj)} × ${fmtN(r.consA)} − ${fmtN(r.exi)} = <b>${fmtN(r.propA)}</b>`:""}</div>
+      </div>
+    </div>
+  </div></td></tr>`;
+}
+const mLab = m => MESC[+m.slice(5)-1]+" "+m.slice(2,4);
+
+function notaClave(r){
+  if(r.consA===null || r.consP===null)
+    return `No hay historia suficiente en los dos periodos para comparar.`;
+  if(!r.consP) return `El año pasado no hubo consumo en esos meses, así que el pronóstico queda en cero.`;
+  const d = Math.round((r.consA/r.consP-1)*100);
+  const t = Math.abs(d)<8 ? `El consumo va <b>parejo</b> contra el año pasado (${d>0?"+":""}${d}%).`
+    : `El consumo viene <b>${d>0?"subiendo":"bajando"}</b>: <b>${d>0?"+":""}${d}%</b> contra el año pasado.`;
+  const pr = (r.propA===r.propP) ? `Los dos escenarios piden lo mismo: <b>${fmtN(r.propA)}</b>.`
+    : `La propuesta cambia de <b>${fmtN(r.propP)}</b> con el pronóstico a <b>${fmtN(r.propA)}</b> con el antecedente.`;
+  return t+" "+pr;
+}
+
+/* ---- vista matriz: un renglón por año ---- */
+function matrizMes(r, vals){
+  const c=r.calc, eff=c?c.eff:serieEfectiva(vals);
+  const anios=[...new Set(MENSUAL.meses.map(m=>m.slice(0,4)))].sort();
+  const inA=new Set(c&&c.A?c.A.meses:[]), inP=new Set(c&&c.P?c.P.meses:[]);
+  const fila=a=>{
+    const cel=MESC.map((_,k)=>{
+      const m=a+"-"+String(k+1).padStart(2,"0"), i=MENSUAL.idx[m];
+      if(i===undefined) return `<td class="na">·</td>`;
+      const bruto=vals[i], e=eff?eff[i]:null;
+      const cls=[ e===null?"pre":"", (bruto===null&&e===0)?"imp":"", e===0?"v0":"",
+                  inA.has(m)?"bA":"", inP.has(m)?"bP":"" ].filter(Boolean).join(" ");
+      const t = e===null ? "Antes de la primera venta" : (bruto===null ? "Sin venta ese mes → cuenta como 0" : "");
+      return `<td class="${cls}"${t?` title="${t}"`:""}>${e===null?"—":fmtN(e)}</td>`;
+    }).join("");
+    const pres=MESC.map((_,k)=>MENSUAL.idx[a+"-"+String(k+1).padStart(2,"0")])
+      .filter(i=>i!==undefined).map(i=>eff?eff[i]:null).filter(v=>v!==null&&v!==undefined);
+    const tot=pres.reduce((x,y)=>x+y,0);
+    return `<tr><td class="anio">${a}</td>${cel}
+      <td class="tot">${pres.length?fmtN(tot):"—"}</td>
+      <td class="prom">${pres.length?fmtN(Math.round(tot/pres.length)):"—"}</td></tr>`;
+  };
+  return `<table class="mm">
+    <thead><tr><th style="text-align:left">Año</th>${MESC.map(m=>`<th>${m}</th>`).join("")}
+      <th class="tot">Total</th><th>Prom.</th></tr></thead>
+    <tbody>${anios.map(fila).join("")}</tbody></table>`;
+}
+
+/* ---- vista lista: un renglón por mes ---- */
+function listaMes(r, vals){
+  const c=r.calc, eff=c?c.eff:serieEfectiva(vals);
+  const inA=new Set(c&&c.A?c.A.meses:[]), inP=new Set(c&&c.P?c.P.meses:[]);
+  const vis=MENSUAL.meses.slice().reverse();
+  const tope=MENSUAL.idx[MENSUAL.ultimo];
+  let first=-1;
+  for(let i=0;i<vals.length;i++) if(vals[i]!==null&&vals[i]!==undefined&&vals[i]!==""){ first=i; break; }
+  return `<div class="vertwrap"><table class="vert">
+    <thead><tr><th>Mes</th><th>Consumo</th><th>Entra a</th></tr></thead>
+    <tbody>${vis.map(m=>{
+      const i=MENSUAL.idx[m], e=eff?eff[i]:null, bruto=vals[i];
+      const et = inA.has(m) ? `<span class="et a">Antecedente</span>`
+               : inP.has(m) ? `<span class="et p">Pronóstico</span>` : "";
+      let txt;
+      if(i>tope)            txt = `<span class="pre">— mes sin cerrar</span>`;
+      else if(i<first)      txt = `<span class="pre">— no existía</span>`;
+      else if(bruto===null) txt = `0 <small class="imp2">sin venta</small>`;
+      else                  txt = fmtN(e);
+      return `<tr class="${inA.has(m)?"mA":inP.has(m)?"mP":""}">
+        <td>${mLab(m)}</td><td>${txt}</td><td>${et}</td></tr>`;
+    }).join("")}</tbody></table></div>`;
 }
 
 /* ---------- CSV ---------- */
