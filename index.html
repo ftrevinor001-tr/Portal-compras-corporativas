@@ -773,7 +773,11 @@ function reglasTexto(){
     primera venta registrada: antes de eso la clave no existía y no promedia.
     <br>Cobertura = existencia ÷ consumo. <b>Faltante</b> si la existencia es 0 ·
     <b>Riesgo</b> si la cobertura es menor a ${REGLAS.riesgoFactorEntrega} × tiempo de entrega ·
-    <b>Sobre inventario</b> si pasa de objetivo + ${REGLAS.sobreMargen} · <b>Óptimo</b> en medio.`;
+    <b>Sobre inventario</b> si pasa de objetivo + ${REGLAS.sobreMargen} · <b>Óptimo</b> en medio.
+    <br><b>Propuesta = consumo × (tiempo de entrega + inventario objetivo) − existencia</b>,
+    igual que el Portal de Compras V2: cubre lo que se consume mientras llega el pedido más el
+    inventario que se quiere tener. <small>El V2 también resta los back orders en tránsito;
+    ese dato no viene en este archivo, así que aquí sólo se resta la existencia.</small>`;
 }
 
 const mShift = (m,k)=>{ const y=+m.slice(0,4), mo=+m.slice(5)-1, t=y*12+mo+k;
@@ -835,15 +839,16 @@ function recalcula(r){
   r.mesesP = P ? (P.prom===0 ? null : (r.exi||0)/P.prom) : null;
   r.catA = clasifica(r.mesesA, r.consA, r.lead, r.obj) || "SINHISTORIA";
   r.catP = clasifica(r.mesesP, r.consP, r.lead, r.obj) || "SINHISTORIA";
-  r.propA = r.consA ? propuesta(r.obj, r.consA, r.exi) : (r.consA===0 ? 0 : null);
-  r.propP = r.consP ? propuesta(r.obj, r.consP, r.exi) : (r.consP===0 ? 0 : null);
+  r.propA = r.consA ? propuesta(r.obj, r.lead, r.consA, r.exi) : (r.consA===0 ? 0 : null);
+  r.propP = r.consP ? propuesta(r.obj, r.lead, r.consP, r.exi) : (r.consP===0 ? 0 : null);
   r.calc = {N, A, P, iniA, iniP, cierre, eff};
 }
 let HIST_CLAVE = {};          // id -> filas de todos los cortes, ordenadas por fecha
 /* misma fórmula que el Excel */
-function propuesta(obj, cons, exi){
+function propuesta(obj, lead, cons, exi){
   if(obj===null||obj===undefined||cons===null||cons===undefined) return null;
-  return Math.max(0, Math.round(obj*cons - (exi||0)));
+  // como el Portal de Compras V2: cubre el tiempo de entrega más el inventario objetivo
+  return Math.max(0, Math.round(cons*((lead||0) + obj) - (exi||0)));
 }
 const rProp = r => BASE==="A" ? r.propA : r.propP;
 const DATOS_URL = "datos.json";
@@ -1063,8 +1068,8 @@ function ingestAOA(aoa, hoja, hojas){
     for(const r of all) recalcula(r);
   }else{
     for(const r of all){
-      if(r.propA===null){ r.propA = propuesta(r.obj, r.consA, r.exi); PROP_CALC.nA++; }
-      if(r.propP===null){ r.propP = propuesta(r.obj, r.consP, r.exi); PROP_CALC.nP++; }
+      if(r.propA===null){ r.propA = propuesta(r.obj, r.lead, r.consA, r.exi); PROP_CALC.nA++; }
+      if(r.propP===null){ r.propP = propuesta(r.obj, r.lead, r.consP, r.exi); PROP_CALC.nP++; }
     }
   }
 
@@ -1947,8 +1952,8 @@ function panelMes(r){
           <dt>Propuesta</dt><dd>${r.propP===null?"—":fmtN(r.propP)}</dd>
         </dl>
         <div class="nota">${notaClave(r)}</div>
-        <div class="formula">Propuesta = objetivo × consumo − existencia
-          ${r.consA?`<br>= ${fmtN(r.obj)} × ${fmtN(r.consA)} − ${fmtN(r.exi)} = <b>${fmtN(r.propA)}</b>`:""}</div>
+        <div class="formula">Propuesta = consumo × (entrega + objetivo) − existencia
+          ${r.consA?`<br>= ${fmtN(r.consA)} × (${fmtN(r.lead,1)} + ${fmtN(r.obj)}) − ${fmtN(r.exi)} = <b>${fmtN(r.propA)}</b>`:""}</div>
       </div>
     </div>
   </div></td></tr>`;
