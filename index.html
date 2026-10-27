@@ -780,6 +780,16 @@ function reglasTexto(){
     ese dato no viene en este archivo, así que aquí sólo se resta la existencia.</small>`;
 }
 
+/* último mes cerrado a la fecha de un corte: el mes anterior al del corte,
+   sin pasarse del último mes que trae la hoja mensual */
+function cierreDe(fecha){
+  if(!MENSUAL) return null;
+  if(!fecha || fecha==="único") return MENSUAL.ultimo;
+  const m = String(fecha).slice(0,7);
+  if(!/^\d{4}-\d{2}$/.test(m)) return MENSUAL.ultimo;
+  const prev = mShift(m,-1);
+  return prev < MENSUAL.ultimo ? prev : MENSUAL.ultimo;
+}
 const mShift = (m,k)=>{ const y=+m.slice(0,4), mo=+m.slice(5)-1, t=y*12+mo+k;
   return String(Math.floor(t/12)).padStart(4,"0")+"-"+String(t%12+1).padStart(2,"0"); };
 
@@ -827,7 +837,7 @@ function recalcula(r){
   const eff = serieEfectiva(vals);
   if(!eff){ sinDatos(); return; }
   const N = Math.max(1, Math.round(r.obj || 3));
-  const cierre = MENSUAL.ultimo;                 // último mes cerrado con datos
+  const cierre = cierreDe(r.fecha);              // último mes cerrado a la fecha de ESE corte
   const iniA = mShift(cierre, -(N-1));           // N meses terminando en el cierre
   const iniP = mShift(cierre, -11);              // los que vienen, del año pasado
   const A = ventana(eff, iniA, N, MENSUAL.idx);
@@ -1054,13 +1064,7 @@ function ingestAOA(aoa, hoja, hojas){
 
   DATES = [...new Set(all.map(r=>r.fecha))].sort();
   LATEST = DATES[DATES.length-1];
-  HIST = {};
-  for(const d of DATES){
-    const A = Object.fromEntries(CATS.map(x=>[x.key,0]));
-    const P = Object.fromEntries(CATS.map(x=>[x.key,0]));
-    all.filter(r=>r.fecha===d).forEach(r=>{ if(r.catA)A[r.catA]++; if(r.catP)P[r.catP]++; });
-    HIST[d]={A,P};
-  }
+
   // El portal calcula consumo, cobertura, estatus y propuesta con la hoja mensual.
   // Si no hay hoja mensual, se cae a lo que traiga el Excel (comportamiento anterior).
   PROP_CALC = {A: M.propA===undefined, P: M.propP===undefined, nA:0, nP:0};
@@ -1071,6 +1075,16 @@ function ingestAOA(aoa, hoja, hojas){
       if(r.propA===null){ r.propA = propuesta(r.obj, r.lead, r.consA, r.exi); PROP_CALC.nA++; }
       if(r.propP===null){ r.propP = propuesta(r.obj, r.lead, r.consP, r.exi); PROP_CALC.nP++; }
     }
+  }
+
+  // HIST se arma CON LOS ESTATUS YA RECALCULADOS: si se armara antes, la gráfica de
+  // tendencia mostraría los del Excel y no cuadraría con las tarjetas KPI.
+  HIST = {};
+  for(const d of DATES){
+    const A = Object.fromEntries(CATS.map(x=>[x.key,0]));
+    const P = Object.fromEntries(CATS.map(x=>[x.key,0]));
+    all.filter(r=>r.fecha===d).forEach(r=>{ if(r.catA)A[r.catA]++; if(r.catP)P[r.catP]++; });
+    HIST[d]={A,P};
   }
 
   HIST_CLAVE = {};
