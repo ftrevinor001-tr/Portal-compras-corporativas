@@ -793,17 +793,22 @@ function cierreDe(fecha){
 const mShift = (m,k)=>{ const y=+m.slice(0,4), mo=+m.slice(5)-1, t=y*12+mo+k;
   return String(Math.floor(t/12)).padStart(4,"0")+"-"+String(t%12+1).padStart(2,"0"); };
 
-/* serie con los ceros ya resueltos: null antes de la primera venta, 0 después */
+/* serie con los ceros ya resueltos: null antes de la primera venta, 0 después.
+   Si la hoja trae los ceros escritos (cerosExplicitos), entonces una celda vacía
+   NO es un cero sino un mes sin dato — por ejemplo porque ese mes no se cargó el
+   kardex de ese almacén — y no debe promediarse como si no se hubiera vendido. */
 function serieEfectiva(vals, hasta){
   let first=-1;
   for(let i=0;i<vals.length;i++) if(vals[i]!==null&&vals[i]!==undefined&&vals[i]!==""){ first=i; break; }
   if(first<0) return null;
   const tope = (hasta!==undefined && hasta!==null) ? hasta
              : (MENSUAL ? MENSUAL.idx[MENSUAL.ultimo] : vals.length-1);
+  const vacioEsSinDato = !!(MENSUAL && MENSUAL.cerosExplicitos);
   return vals.map((v,i)=>{
     if(i<first) return null;            // la clave todavía no existía
     if(i>tope)  return null;            // mes aún no cerrado / sin cargar
-    return (v===null||v===undefined||v==="") ? 0 : +v;
+    if(v===null||v===undefined||v==="") return vacioEsSinDato ? null : 0;
+    return +v;
   });
 }
 function ventana(eff, iniMes, n, idx){
@@ -815,8 +820,11 @@ function ventana(eff, iniMes, n, idx){
   }
   return xs.length ? {prom: xs.reduce((a,b)=>a+b,0)/xs.length, n:xs.length, meses} : null;
 }
-function clasifica(meses, cons, entr, obj){
+function clasifica(meses, cons, entr, obj, exi){
   if(cons===null) return null;              // sin historia en ese periodo
+  // Existencia en cero es FALTANTE, aunque ese periodo no registre consumo.
+  // Antes ganaba "sin consumo" y escondía claves que de verdad están agotadas.
+  if(!(exi>0))    return "FALTANTE";
   if(cons===0)    return "SINCONSUMO";
   if(!meses)      return "FALTANTE";
   if(meses < REGLAS.riesgoFactorEntrega*(entr||0)) return "RIESGO";
@@ -847,8 +855,8 @@ function recalcula(r){
   r.consP = P ? Math.round(P.prom*10)/10 : null;
   r.mesesA = A ? (A.prom===0 ? null : (r.exi||0)/A.prom) : null;
   r.mesesP = P ? (P.prom===0 ? null : (r.exi||0)/P.prom) : null;
-  r.catA = clasifica(r.mesesA, r.consA, r.lead, r.obj) || "SINHISTORIA";
-  r.catP = clasifica(r.mesesP, r.consP, r.lead, r.obj) || "SINHISTORIA";
+  r.catA = clasifica(r.mesesA, r.consA, r.lead, r.obj, r.exi) || "SINHISTORIA";
+  r.catP = clasifica(r.mesesP, r.consP, r.lead, r.obj, r.exi) || "SINHISTORIA";
   r.propA = r.consA ? propuesta(r.obj, r.lead, r.consA, r.exi) : (r.consA===0 ? 0 : null);
   r.propP = r.consP ? propuesta(r.obj, r.lead, r.consP, r.exi) : (r.consP===0 ? 0 : null);
   r.calc = {N, A, P, iniA, iniP, cierre, eff};
@@ -1124,7 +1132,10 @@ async function cargarDelRepo(){
         if(Object.values(d.mensual.filas).some(v=>v[k]!==null && v[k]!==undefined)){ ultimo=M[k]; break; }
       }
       if(ultimo) MENSUAL = {hoja:d.mensual.hoja||"Consumo mensual", meses:M, idx,
-                            filas:d.mensual.filas, ultimo, claves:Object.keys(d.mensual.filas).length};
+                            filas:d.mensual.filas, ultimo, claves:Object.keys(d.mensual.filas).length,
+                            // el generador escribe los ceros: una celda vacía es "no hay dato"
+                            cerosExplicitos: !!d.mensual.ceros_explicitos,
+                            incompletos: d.mensual.incompletos || null};
     }
     ingestAOA(d.filas, d.hoja || "Stock_compras acumulado", d.hojas);
     return true;
@@ -1945,7 +1956,7 @@ function panelMes(r){
         <div class="leg">
           <span><i class="sw a"></i> Antecedente${c&&c.A?` · ${c.A.meses.map(mLab).join(", ")} → ${fmtN(r.consA)}/mes`:""}</span>
           <span><i class="sw p"></i> Pronóstico${c&&c.P?` · ${c.P.meses.map(mLab).join(", ")} → ${fmtN(r.consP)}/mes`:""}</span>
-          <span><i class="sw n"></i> Antes de la primera venta (no promedia)</span>
+          <span><i class="sw n"></i> — = antes de la primera venta, o mes sin dato (no promedia)</span>
         </div>
       </div>
       <div class="resu">
@@ -1998,7 +2009,11 @@ function matrizMes(r, vals){
       const bruto=vals[i], e=eff?eff[i]:null;
       const cls=[ e===null?"pre":"", (bruto===null&&e===0)?"imp":"", e===0?"v0":"",
                   inA.has(m)?"bA":"", inP.has(m)?"bP":"" ].filter(Boolean).join(" ");
-      const t = e===null ? "Antes de la primera venta" : (bruto===null ? "Sin venta ese mes → cuenta como 0" : "");
+      const t = e===null
+        ? ((bruto===null||bruto===undefined||bruto==="") && MENSUAL.cerosExplicitos && i<=(c?MENSUAL.idx[MENSUAL.ultimo]:1e9)
+            ? "Sin dato: ese mes no trae el kardex de este almacén (no promedia)"
+            : "Antes de la primera venta")
+        : (bruto===null ? "Sin venta ese mes → cuenta como 0" : "");
       return `<td class="${cls}"${t?` title="${t}"`:""}>${e===null?"—":fmtN(e)}</td>`;
     }).join("");
     const pres=MESC.map((_,k)=>MENSUAL.idx[a+"-"+String(k+1).padStart(2,"0")])
