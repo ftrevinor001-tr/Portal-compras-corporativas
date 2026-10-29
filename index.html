@@ -554,7 +554,7 @@ tfoot td{padding:10px 12px;font-size:12px;color:var(--muted);border:0}
   </div>
 </header>
 
-<input type="file" id="file" accept=".xlsx,.xlsm,.xls" class="hidden">
+<input type="file" id="file" accept=".xlsx,.xlsm,.xls,.json" class="hidden">
 
 <div class="wrap hidden" id="pane-hist">
   <div class="hbar">
@@ -580,7 +580,9 @@ tfoot td{padding:10px 12px;font-size:12px;color:var(--muted);border:0}
   <div class="drop" id="drop">
     <div class="big">📦</div>
     <h2 id="dropTitle">Carga tu archivo de stock</h2>
-    <p>Arrastra aquí <strong>Stock compras corporativas.xlsx</strong> o haz clic para buscarlo.<br> Todo se procesa en tu navegador; el archivo nunca sale de tu computadora.</p>
+    <p>Arrastra aquí <strong>datos.json</strong> (el que genera «Actualizar consumos») o
+       <strong>Stock compras corporativas.xlsx</strong>, o haz clic para buscarlo.<br>
+       Todo se procesa en tu navegador; el archivo nunca sale de tu computadora.</p>
     <button class="btn primary" id="load2">📂 Seleccionar archivo</button>
   </div>
 
@@ -900,8 +902,23 @@ window.addEventListener("dragover",e=>e.preventDefault());
 window.addEventListener("drop",e=>e.preventDefault());
 
 function readFile(file){
-  META = {archivo:file.name, bytes:file.size};
   const fr = new FileReader();
+  /* Un datos.json trae TODO (cortes + consumos) y se aplica tal cual.
+     Un Excel sólo trae el corte y se procesa con SheetJS. */
+  if(/\.json$/i.test(file.name)){
+    fr.onload = ev => {
+      try{
+        aplicaJson(JSON.parse(ev.target.result), "local");
+        META.archivo = file.name; META.bytes = file.size;
+      }catch(err){
+        alert("No pude leer ese datos.json.\n\n"+err.message+
+              "\n\nDebe ser el datos.json que genera «Actualizar consumos».");
+      }
+    };
+    fr.readAsText(file);
+    return;
+  }
+  META = {archivo:file.name, bytes:file.size};
   fr.onload = ev => {
     try{
       const wb = XLSX.read(new Uint8Array(ev.target.result), {type:"array", cellDates:true});
@@ -1119,6 +1136,28 @@ function ingestAOA(aoa, hoja, hojas){
   irA("dash");
 }
 
+/* Aplica un datos.json, venga del repositorio o de un archivo local.
+   origen: "repo" (publicado) o "local" (lo abriste en esta computadora). */
+function aplicaJson(d, origen){
+  if(!d || !Array.isArray(d.filas) || d.filas.length<2) throw new Error("formato");
+  META = {archivo: d.archivo || "datos.json", origen,
+          generado: d.generado || null, bytes:null};
+  MENSUAL = null;
+  if(d.mensual && d.mensual.meses && d.mensual.filas){
+    const M=d.mensual.meses, idx=Object.fromEntries(M.map((m,k)=>[m,k]));
+    let ultimo=null;
+    for(let k=M.length-1;k>=0;k--){
+      if(Object.values(d.mensual.filas).some(v=>v[k]!==null && v[k]!==undefined)){ ultimo=M[k]; break; }
+    }
+    if(ultimo) MENSUAL = {hoja:d.mensual.hoja||"Consumo mensual", meses:M, idx,
+                          filas:d.mensual.filas, ultimo, claves:Object.keys(d.mensual.filas).length,
+                          // el generador escribe los ceros: una celda vacía es "no hay dato"
+                          cerosExplicitos: !!d.mensual.ceros_explicitos,
+                          incompletos: d.mensual.incompletos || null};
+  }
+  return ingestAOA(d.filas, d.hoja || "Stock_compras acumulado", d.hojas);
+}
+
 /* ============ datos publicados en el repo ============ */
 async function cargarDelRepo(){
   const el = $("origen");
@@ -1127,22 +1166,7 @@ async function cargarDelRepo(){
     const res = await fetch(DATOS_URL + "?t=" + Date.now(), {cache:"no-store"});
     if(!res.ok) throw new Error("HTTP "+res.status);
     const d = await res.json();
-    if(!d || !Array.isArray(d.filas) || d.filas.length<2) throw new Error("formato");
-    META = {archivo: d.archivo || DATOS_URL, origen:"repo", generado: d.generado || null, bytes:null};
-    MENSUAL = null;
-    if(d.mensual && d.mensual.meses && d.mensual.filas){
-      const M=d.mensual.meses, idx=Object.fromEntries(M.map((m,k)=>[m,k]));
-      let ultimo=null;
-      for(let k=M.length-1;k>=0;k--){
-        if(Object.values(d.mensual.filas).some(v=>v[k]!==null && v[k]!==undefined)){ ultimo=M[k]; break; }
-      }
-      if(ultimo) MENSUAL = {hoja:d.mensual.hoja||"Consumo mensual", meses:M, idx,
-                            filas:d.mensual.filas, ultimo, claves:Object.keys(d.mensual.filas).length,
-                            // el generador escribe los ceros: una celda vacía es "no hay dato"
-                            cerosExplicitos: !!d.mensual.ceros_explicitos,
-                            incompletos: d.mensual.incompletos || null};
-    }
-    ingestAOA(d.filas, d.hoja || "Stock_compras acumulado", d.hojas);
+    aplicaJson(d, "repo");
     return true;
   }catch(err){
     el.innerHTML = `<div class="src falta">
