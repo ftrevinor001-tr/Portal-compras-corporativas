@@ -980,7 +980,12 @@ function ingest(wb){
   const hoja = pickSheet(wb);
   const sh = wb.Sheets[hoja];
   const aoa = XLSX.utils.sheet_to_json(sh,{header:1,defval:null,blankrows:false});
-  MENSUAL = leeMensual(wb);
+  /* Si el libro que cargas trae hoja Consumo mensual, manda ésa.  Si no la trae,
+     se conserva la que ya venía del datos.json: así el Stock puede quedarse sólo
+     con existencias y parámetros, y los consumos los sigue poniendo el proceso
+     mensual sin que una carga de Excel los pise con datos viejos. */
+  const mNueva = leeMensual(wb);
+  if(mNueva) MENSUAL = mNueva;
   return ingestAOA(aoa, hoja, wb.SheetNames);
 }
 
@@ -1324,7 +1329,11 @@ function jsonDatos(){
     archivo: META&&META.archivo || "Stock compras corporativas.xlsx",
     hoja: HOJA, hojas: META&&META.hojas || [HOJA],
     filas,
-    mensual: MENSUAL ? {hoja:MENSUAL.hoja, meses:MENSUAL.meses, filas:MENSUAL.filas} : null
+    /* ceros_explicitos e incompletos tienen que viajar: sin ellos el portal
+       vuelve a tratar la celda vacía como cero y se pierden los meses sin dato */
+    mensual: MENSUAL ? {hoja:MENSUAL.hoja, meses:MENSUAL.meses, filas:MENSUAL.filas,
+                        ceros_explicitos: !!MENSUAL.cerosExplicitos,
+                        incompletos: MENSUAL.incompletos || {}} : null
   });
 }
 function descargarJson(){
