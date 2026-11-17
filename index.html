@@ -693,13 +693,6 @@ tfoot td{padding:10px 12px;font-size:12px;color:var(--muted);border:0}
     </div>
   </div>
 
-  <div class="panel" style="margin-bottom:14px">
-    <h3>Claves más críticas</h3>
-    <p class="cap">Faltante y riesgo, ordenadas por consumo promedio mensual en su unidad mínima — lo que más duele si no llega.</p>
-    <div class="legend" id="critLeg"></div>
-    <div id="crit"></div>
-  </div>
-
   <div class="filters">
     <input id="q" type="search" placeholder="Buscar por clave o descripción…" autocomplete="off">
     <select id="fCat"><option value="">Todas las categorías</option></select>
@@ -708,6 +701,7 @@ tfoot td{padding:10px 12px;font-size:12px;color:var(--muted);border:0}
     <select id="fSub"><option value="">Todos los subgrupos</option></select>
     <button class="btn" id="soloProp" aria-pressed="false">🛒 Sólo por comprar</button>
     <button class="btn" id="clear">Limpiar</button>
+    <button class="btn" id="xls" title="Baja a Excel las claves que se ven ahora, con los filtros aplicados">⬇ Excel</button>
     <span class="chip" id="count"></span>
   </div>
 
@@ -1586,7 +1580,7 @@ const legendFor = cats => cats.map(c=>
 ).join("");
 
 /* ============ render maestro ============ */
-function renderAll(){ renderAlerta(); renderKpis(); renderTrend(); renderMonths(); renderCrit(); renderTable(); }
+function renderAll(){ renderAlerta(); renderKpis(); renderTrend(); renderMonths(); renderTable(); }
 function updateCount(){
   const n = kpiBase().filter(r=>rProp(r)>0).length, b = $("soloProp");
   if(b){
@@ -1793,59 +1787,6 @@ function renderMonths(){
         <div class="r">Claves<span class="n">${counts[i]}</span></div>`, e.clientX, e.clientY);
     };
     r.onmouseleave=hideTip;
-  });
-}
-
-/* ---------- claves más críticas ---------- */
-function renderCrit(){
-  $("critLeg").innerHTML = legendFor(CATS.filter(c=>c.key==="FALTANTE"||c.key==="RIESGO"));
-  const rows = kpiBase()
-    .filter(r=>rCat(r)==="FALTANTE"||rCat(r)==="RIESGO")
-    .sort((a,b)=>(rCons(b)||0)-(rCons(a)||0)).slice(0,12);
-  const el=$("crit");
-  if(!rows.length){ el.innerHTML=`<div class="note">No hay claves en faltante ni en riesgo con el filtro actual. 🎉</div>`; return; }
-
-  const rowH=42, W=940, P={t:8,r:132,b:24,l:352};
-  const H=P.t+rows.length*rowH+P.b, iw=W-P.l-P.r;
-  const max=Math.max(1,...rows.map(r=>rCons(r)||0));
-  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Claves críticas por consumo promedio">`;
-  rows.forEach((r,i)=>{
-    const c=CATMAP[rCat(r)], col=cssv(c.css);
-    const y=P.t+i*rowH, bh=18, by=y+7;
-    const w=Math.max(2,(rCons(r)||0)/max*iw), rr=Math.min(4,bh/2,w);
-    const txt=(r.desc||"").replace(/^XX\*/,"");
-    // línea 1: icono + clave + descripción
-    s+=`<text x="2" y="${y+16}" style="font-size:11px">${c.icon}</text>`;
-    s+=`<text x="26" y="${y+16}" fill="var(--ink-2)" style="font-size:11.5px;font-variant-numeric:tabular-nums">${r.id}</text>`;
-    s+=`<text x="72" y="${y+16}" fill="var(--ink)" style="font-size:11.5px" textLength="${Math.min(262,(Math.min(txt.length,34))*6.6)}" lengthAdjust="spacingAndGlyphs">${esc(txt.length>34?txt.slice(0,33)+"…":txt)}</text>`;
-    // línea 2: marca · subgrupo
-    const meta=[r.mar,r.sub].filter(Boolean).join("  ·  ");
-    if(meta) s+=`<text x="72" y="${y+30}" fill="var(--muted)" style="font-size:10.5px" textLength="${Math.min(262,(Math.min(meta.length,40))*5.6)}" lengthAdjust="spacingAndGlyphs">${esc(meta.length>40?meta.slice(0,39)+"…":meta)}</text>`;
-    // barra + valor con unidad de medida
-    s+=`<path d="M${P.l} ${by} L${P.l+w-rr} ${by} Q${P.l+w} ${by} ${P.l+w} ${by+rr} L${P.l+w} ${by+bh-rr} Q${P.l+w} ${by+bh} ${P.l+w-rr} ${by+bh} L${P.l} ${by+bh} Z" fill="${col}"/>`;
-    s+=`<text class="g-lab" x="${P.l+w+8}" y="${by+13}">${fmtN(rCons(r))}<tspan fill="var(--muted)" style="font-weight:500;font-size:10px"> ${esc(uniLabel(r.uni,rCons(r)))}</tspan>${empeora(r)?'<tspan fill="var(--st-critical)" style="font-size:10px;font-weight:700"> ⇄</tspan>':''}</text>`;
-    s+=`<rect x="0" y="${y}" width="${W}" height="${rowH}" fill="transparent" data-i="${i}" style="cursor:default"/>`;
-  });
-  s+=`<line class="g-axis" x1="${P.l}" y1="${P.t}" x2="${P.l}" y2="${P.t+rows.length*rowH}"/>`;
-  s+=`<text class="g-tick" x="${P.l}" y="${H-6}">consumo promedio mensual, en la unidad mínima de cada clave</text>`;
-  s+=`</svg>`;
-  el.innerHTML=s;
-  el.querySelectorAll("rect[data-i]").forEach(rc=>{
-    rc.onmousemove=e=>{
-      const r=rows[+rc.dataset.i], c=CATMAP[rCat(r)];
-      showTip(`<div class="t">${r.id} · ${esc(r.desc)}</div>
-        <div class="r"><span class="d" style="background:${cssv(c.css)}"></span>${c.icon} ${c.label}</div>
-        <div class="r">Unidad mínima<span class="n">${esc(r.uni||"—")}</span></div>
-        <div class="r">Existencia<span class="n">${fmtN(r.exi)}</span></div>
-        <div class="r">Consumo ${ESC[BASE].corto}<span class="n">${fmtN(rCons(r))}</span></div>
-        <div class="r">Meses inv. ${ESC[BASE].corto}<span class="n">${fmtN(rMeses(r),1)}</span></div>
-        <div class="r">🛒 Propuesta ${ESC[BASE].corto}<span class="n">${fmtN(rProp(r))} ${esc(uniLabel(r.uni,rProp(r)))}</span></div>
-        ${cambia(r)?`<div class="r">⇄ Con ${BASE==="A"?"pronóstico":"antecedente"}<span class="n">${CATMAP[BASE==="A"?r.catP:r.catA].label}</span></div>`:""}
-        <div class="r">Marca<span class="n">${esc(r.mar||"—")}</span></div>
-        <div class="r">Subgrupo<span class="n">${esc(r.sub||"—")}</span></div>
-        <div class="r">Comprador<span class="n">${esc(r.buy||"—")}</span></div>`, e.clientX, e.clientY);
-    };
-    rc.onmouseleave=hideTip;
   });
 }
 
@@ -2111,6 +2052,70 @@ function exportCSV(){
   setTimeout(()=>URL.revokeObjectURL(a.href),2000);
 }
 $("csv").onclick = exportCSV;
+
+/* ---------- Excel ----------
+   Baja lo que se ve en la tabla, con los filtros puestos.  Dos hojas:
+   "Detalle de claves" (igual que la tabla) y "Consumo mensual" (la serie de
+   cada clave, que es lo que hay detrás del panel mes a mes).
+   Los números van como números, no como texto, para que se puedan sumar y
+   filtrar en Excel sin tener que reconvertirlos. */
+function exportXLSX(){
+  if(typeof XLSX === "undefined"){
+    alert("No se pudo cargar la librería de Excel (puede ser la conexión).\n\n"+
+          "Usa ⬇ CSV mientras tanto: se abre igual en Excel.");
+    return;
+  }
+  const rows = filtered();
+  if(!rows.length){ alert("No hay claves que bajar con los filtros actuales."); return; }
+  const lab = k => CATMAP[k] ? CATMAP[k].label : "";
+  const n   = v => (v===null||v===undefined||v==="") ? null : v;
+
+  /* ---- hoja 1: el detalle, en el mismo orden que la tabla ---- */
+  const head = ["Clave","Descripción","Existencia","Unidad mínima",
+    "Consumo Ant.","Meses inv. Ant.","Estatus Ant.",
+    "Consumo Pron.","Meses inv. Pron.","Estatus Pron.",
+    "Cambia de estatus","Empeora con pronóstico",
+    "Inventario objetivo","Tiempo de entrega","Comprador","Marca","Subgrupo",
+    "Propuesta Ant.","Propuesta Pron.","Corte"];
+  const aoa = [head].concat(rows.map(r=>[
+    r.id, r.desc, n(r.exi), r.uni,
+    n(r.consA), n(r.mesesA===null?null:Math.round(r.mesesA*10)/10), lab(r.catA),
+    n(r.consP), n(r.mesesP===null?null:Math.round(r.mesesP*10)/10), lab(r.catP),
+    cambia(r)?"Sí":"No", empeora(r)?"Sí":"No",
+    n(r.obj), n(r.lead), r.buy||"", r.mar||"", r.sub||"",
+    n(r.propA), n(r.propP), r.fecha
+  ]));
+  const ws = XLSX.utils.aoa_to_sheet(aoa);
+  ws["!cols"] = [{wch:9},{wch:46},{wch:11},{wch:13},{wch:12},{wch:14},{wch:16},
+                 {wch:13},{wch:15},{wch:16},{wch:17},{wch:21},{wch:17},{wch:16},
+                 {wch:18},{wch:16},{wch:20},{wch:14},{wch:15},{wch:12}];
+  ws["!autofilter"] = {ref: XLSX.utils.encode_range({s:{r:0,c:0},e:{r:aoa.length-1,c:head.length-1}})};
+  ws["!freeze"] = {xSplit:2, ySplit:1};
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Detalle de claves");
+
+  /* ---- hoja 2: consumo mes a mes de esas mismas claves ---- */
+  if(MENSUAL){
+    const h2 = ["Clave","Descripción","Unidad mínima"].concat(MENSUAL.meses);
+    const a2 = [h2].concat(rows.map(r=>{
+      const serie = MENSUAL.filas[r.id];
+      return [r.id, r.desc, r.uni].concat(MENSUAL.meses.map((m,i)=>{
+        if(!serie) return null;
+        const v = serie[i];
+        return (v===null||v===undefined||v==="") ? null : +v;   // vacío = sin dato
+      }));
+    }));
+    const ws2 = XLSX.utils.aoa_to_sheet(a2);
+    ws2["!cols"] = [{wch:9},{wch:46},{wch:13}].concat(MENSUAL.meses.map(()=>({wch:9})));
+    ws2["!freeze"] = {xSplit:3, ySplit:1};
+    XLSX.utils.book_append_sheet(wb, ws2, "Consumo mensual");
+  }
+
+  const nom = `Detalle de claves ${LATEST||"corte"} (${ESC[BASE].nom.toLowerCase()}).xlsx`;
+  XLSX.writeFile(wb, nom);
+}
+$("xls").onclick = exportXLSX;
 
 /* ---------- selector antecedente / pronóstico ---------- */
 $("seg").querySelectorAll(".segb").forEach(b=>{
@@ -2536,7 +2541,7 @@ $("theme").onclick = ()=>{
 if(matchMedia("(prefers-color-scheme: dark)").matches)
   document.documentElement.setAttribute("data-theme","dark");
 
-addEventListener("resize", ()=>{ if(ROWS.length){ renderTrend(); renderMonths(); renderCrit(); } });
+addEventListener("resize", ()=>{ if(ROWS.length){ renderTrend(); renderMonths(); } });
 
 /* ============ arranque ============ */
 cargarDelRepo();
