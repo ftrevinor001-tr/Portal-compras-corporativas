@@ -2112,7 +2112,13 @@ function exportXLSX(){
     XLSX.utils.book_append_sheet(wb, ws2, "Consumo mensual");
   }
 
-  const nom = `Detalle de claves ${LATEST||"corte"} (${ESC[BASE].nom.toLowerCase()}).xlsx`;
+  /* El nombre lleva la fecha y hora en que SE BAJÓ el archivo, no la del corte:
+     así dos descargas del mismo día no se pisan y se sabe cuál es la más nueva.
+     Sin dos puntos, que Windows no los admite en nombres de archivo. */
+  const z = n => String(n).padStart(2,"0");
+  const h = new Date();
+  const sello = `${h.getFullYear()}-${z(h.getMonth()+1)}-${z(h.getDate())} ${z(h.getHours())}${z(h.getMinutes())}`;
+  const nom = `Detalle de claves ${sello} (${ESC[BASE].nom.toLowerCase()}).xlsx`;
   XLSX.writeFile(wb, nom);
 }
 $("xls").onclick = exportXLSX;
